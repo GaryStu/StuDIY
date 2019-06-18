@@ -1,0 +1,294 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title> StuDIY </title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        @import url(http://fonts.googleapis.com/css?family=Montserrat);
+        @import url(https://fonts.googleapis.com/css?family=Lato);
+        @import url(https://fonts.googleapis.com/css?family=PT+Sans);
+        @import url(https://fonts.googleapis.com/css?family=Noto+Sans+SC);
+        @import url(https://fonts.googleapis.com/css?family=Fira+Sans);
+
+        body {
+            background-color: #222121;
+        }
+
+        header {
+            color: white;
+            font-family: 'Fira Sans', sans-serif;
+            font-size: 25px;
+            margin-left: 20px;
+            margin-top: 18px;
+        }
+
+        .options {
+            color: white;
+            font-family: 'Fira Sans', sans-serif;
+            font-size: 21px;
+            margin-top: 50px;
+            /* border-color: white;
+            border-style: solid; */
+            padding: 20px 10px;
+            margin-left: 485px;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 700px;
+        }
+
+        #button {
+            background-color: white;
+            color: black;
+        }
+
+        #result {
+            height: 15em;
+            overflow: auto;
+            overflow-x: hidden;
+            font-size: 15px;
+            color: grey;
+            align-content: left;
+        }
+
+        select {
+            color: black;
+            font-size: 17px;
+        }
+
+        .spacing {
+            height: 50px;
+        }
+
+        input[type=submit] {
+            color: black;
+            background-color: white;
+            padding: 0 16.5 0 16.5;
+            border: none;
+            border-radius: 5px;
+            height: 4.9vh;
+            font-size: 17px;
+            margin-left: 180px;
+            margin-top: 30px;
+        }
+
+        #caption {
+            color: white;
+            font-size: 15px;
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <img src=http://localhost:8888/studiy.svg alt="art" style="margin: 120 0 0 510;" height=100px>
+    <header style="text-align: center;"> UPLOAD FILE</header>
+    <form class="options"> 
+        <div class="spacing">
+            <div style="display: inline"> File: </div>
+            <input style="display: inline; margin-left: 15px;" name="files" type="file" id="fileButton" required/>
+        </div>
+        <div class="spacing">
+            <div style="display: inline;"> Module Code: </div>
+            <input type="text" style="display: inline; width: 300px; margin-left: 15px;" name="search" id="search" placeholder="Enter Module Code" class="form-control" autocomplete="off" required />
+            <ul class="list-group" id="result" style="width: 300px; margin: 0 0 -220 135;"></ul>
+        </div>
+
+        <div class="spacing">
+            <div style="display: inline"> Category: </div>
+            <select style="margin-left: 15px;">
+                <option value="Lecture Notes">Lecture Notes</option>
+                <option value="Tutorials">Tutorials</option>
+                <option value="Past Year Papers">Past Year Papers</option>
+                <option value="Extra Practice">Extra Practice</option>
+            </select>
+        </div>
+        <div class="spacing">
+            <div style="display: inline"> Year: </div>
+            <select style="margin-left: 15px;">
+                <option value="AY 2012/2013"> AY 12/13 </option>
+                <option value="AY 2013/2014"> AY 13/14 </option>
+                <option value="AY 2014/2015"> AY 14/15 </option>
+                <option value="AY 2015/2016"> AY 15/16 </option>
+                <option value="AY 2016/2017"> AY 16/17 </option>
+                <option value="AY 2017/2018"> AY 17/18 </option>
+                <option value="AY 2018/2019"> AY 18/19 </option>
+            </select>
+            <div style="display: inline; margin-left: 50px;"> Semester: </div>
+            <select style="margin-left: 15px;">
+                <option value="Semester 1"> 1 </option>
+                <option value="Semester 2"> 2 </option>
+            </select>
+        </div>
+        <div class="spacing">
+            <div style="display: inline;"> Title: </div>
+            <input type="text" style="display: inline; width: 386px; margin-left: 15px;" name="search" placeholder="Enter Title" class="form-control" autocomplete="off" required />
+        </div>
+        <div class="spacing">
+            <input type="submit" value="Upload" id="submitButton">
+        </div>
+    </form>
+    <p id="caption"> Please note that uploaded documents are subject to the admins' approval before they will be accesible to all users. </p>
+
+    //TODO: check for the most updated version of the links
+    <script
+        src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+        apiKey: "AIzaSyBoWu-FQKyuskKlXF77SknhQazBi6tQpEI",
+        authDomain: "studiy.firebaseapp.com",
+        databaseURL: "https://studiy.firebaseio.com",
+        projectId: "studiy",
+        storageBucket: "studiy.appspot.com",
+        messagingSenderId: "973457443239",
+        appId: "1:973457443239:web:e6be93a824079bb0"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        // Get elements
+        var form = document.getElementsByClassName('options');
+
+        // Listen for file selection
+        form.addEventListener('submit', function(e) {
+            // Get file and reference for the elements in the form
+            var file = e.target.files[0];
+            var moduleCodeRef = document.getElementById();
+            var categoryRef = ;
+            var yearRef = ;
+            var sememsterRef = ;
+            //Create a storage reference
+            var storageRef = firebase.storage().ref();
+
+            // TODO: form validaton  
+            // https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Form_validation
+
+            // Uploading a file, it will return "upload task"
+            // we then assign this upload task to monitor the upload progress
+            var task = storageRef.put(file);
+
+            // Update progress bar
+            // Register three observers:
+            // 1. 'state_changed' observer, called any time the state changes
+            // 2. Error observer, called on failuyre
+            // 3. Completion observer, called on successful completion
+            task.on('state_changed',
+                    
+                function progress(snapshot) {
+                    // Observe state change events such as progress, pause, and resume
+                    // Get task progress including the number of bytes uploaded and the total number of bytes to be uploaded 
+                    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
+                    switch (snapshot.state) {
+                        case firebase.storage.TaskState.PAUSED: // or 'paused'
+                            console.log('Upload is paused');
+                            break;
+                        case firebase.storage.TaskState.RUNNING: // or 'running'
+                            console.log('Upload is running');
+                            break;
+                    }
+                },
+                
+                function error(err) {
+                    // Handle unsuccessful uploads
+                    switch(err.code) {
+                        case 'storage/unknown':
+                            console.log('An unknown error occured.');
+                        break;
+                        case 'storage/object-not-found':
+                            console.log('No object exists at the desired reference.');
+                        break;
+                        case 'storage/bucket-not-found':
+                            console.log('No bucket is configured for Cloud Storage');
+                        break;
+                        case 'storage/project-not-found':
+                            console.log('No project is configured for Cloud Storage');
+                        break;
+                        case 'storage/quota-exceeded':
+                            console.log("Quota on your Cloud Storage bucket has been exceeded. If you're on the free tier, upgrade to a paid plan. If you're on a paid plan, reach out to Firebase support.");
+                        break;
+                        case 'storage/unauthenticated':
+                            console.log('User is unauthenticated, please authenticate and try again.');
+                        break;
+                        case 'storage/unauthorized':
+                            console.log('User is not authorized to perform the desired action, check your security rules to ensure they are correct.');
+                        break;
+                        case 'storage/retry-limit-exceeded':
+                            console.log('The maximum time limit on an operation (upload, download, delete, etc.) has been excceded. Try uploading again.');
+                        break;
+                        case 'storage/invalid-checksum':
+                            console.log('File on the client does not match the checksum of the file received by the server. Try uploading again.');
+                        break;
+                        case 'storage/canceled':
+                            console.log('User canceled the operation.');
+                        break;
+                        case 'storage/invalid-event-name':
+                            console.log('Invalid event name provided. Must be one of [`running`, `progress`, `pause`]');
+                        break;
+                        case 'storage/invalid-url':
+                            console.log('Invalid URL provided to refFromURL(). Must be of the form: gs://bucket/object or https://firebasestorage.googleapis.com/v0/b/bucket/o/object?token=<TOKEN>');
+                        break;
+                        case 'storage/invalid-argument':
+                            console.log('The argument passed to put() must be `File`, `Blob`, or `UInt8` Array. The argument passed to putString() must be a raw, `Base64`, or `Base64URL` string.');
+                        break;
+                        case 'storage/no-default-bucket':
+                            console.log("No bucket has been set in your config's storageBucket property.");
+                        break;
+                        case 'storage/cannot-slice-blob':
+                            console.log("Commonly occurs when the local file has changed (deleted, saved again, etc.). Try uploading again after verifying that the file hasn't changed.");
+                        break;
+                        case 'storage/server-file-wrong-size':
+                            console.log('File on the client does not match the size of the file recieved by the server. Try uploading again.');
+                        break;
+                    }
+                },
+
+                function complete() {
+                    //Handle successful uploads on complete
+                    uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                        console.log('File available at', downloadURL);
+                    });
+                }
+            );             
+        });
+    </script>
+
+</body>
+
+</html>
+
+<script>
+    //The search functionalities
+    $(document).ready(function() {
+        $.ajaxSetup({
+            cache: false
+        });
+        $('#search').keyup(function() {
+            $('#result').html('');
+            var searchField = $('#search').val();
+            var expression = new RegExp(searchField, "i");
+            $.getJSON('https://api.nusmods.com/v2/2018-2019/moduleList.json', function(data) {
+                $.each(data, function(key, value) {
+                    if (value.moduleCode.search(expression) != -1) {
+                        $('#result').append('<li class="list-group-item link-class"> ' + value.moduleCode + ' | <span class="text-muted">' + value.title + '</span></li>');
+                    };
+                });
+            });
+        });
+    });
+
+    $('#result').on('click', 'li', function() {
+        var click_text = $(this).text().split('|');
+        $('#search').val($.trim(click_text[0]));
+        $("#result").html('');
+        $('.toggler').show();
+        $('html, body').animate({
+            scrollTop: $('.toggler').offset().top
+        }, 'slow');
+    });
+</script>
