@@ -27,7 +27,7 @@
             margin-top: 18px;
         }
 
-        .options {
+        #options {
             color: white;
             font-family: 'Fira Sans', sans-serif;
             font-size: 21px;
@@ -88,10 +88,10 @@
 <body>
     <img src=http://localhost:8888/studiy.svg alt="art" style="margin: 120 0 0 510;" height=100px>
     <header style="text-align: center;"> UPLOAD FILE</header>
-    <form class="options"> 
+    <form id="options" method=POST enctype="multipart/form-data"> 
         <div class="spacing">
             <div style="display: inline"> File: </div>
-            <input style="display: inline; margin-left: 15px;" name="files" type="file" id="fileButton" required/>
+            <input style="display: inline; margin-left: 15px;" name="files" type="file" id="browseFile" accept=".pdf" required/>
         </div>
         <div class="spacing">
             <div style="display: inline;"> Module Code: </div>
@@ -101,7 +101,7 @@
 
         <div class="spacing">
             <div style="display: inline"> Category: </div>
-            <select style="margin-left: 15px;">
+            <select style="margin-left: 15px;" id="category">
                 <option value="Lecture Notes">Lecture Notes</option>
                 <option value="Tutorials">Tutorials</option>
                 <option value="Past Year Papers">Past Year Papers</option>
@@ -110,17 +110,17 @@
         </div>
         <div class="spacing">
             <div style="display: inline"> Year: </div>
-            <select style="margin-left: 15px;">
-                <option value="AY 2012/2013"> AY 12/13 </option>
-                <option value="AY 2013/2014"> AY 13/14 </option>
-                <option value="AY 2014/2015"> AY 14/15 </option>
-                <option value="AY 2015/2016"> AY 15/16 </option>
-                <option value="AY 2016/2017"> AY 16/17 </option>
-                <option value="AY 2017/2018"> AY 17/18 </option>
-                <option value="AY 2018/2019"> AY 18/19 </option>
+            <select style="margin-left: 15px;" id="AY">
+                <option value="AY 2012-2013"> AY 12/13 </option>
+                <option value="AY 2013-2014"> AY 13/14 </option>
+                <option value="AY 2014-2015"> AY 14/15 </option>
+                <option value="AY 2015-2016"> AY 15/16 </option>
+                <option value="AY 2016-2017"> AY 16/17 </option>
+                <option value="AY 2017-2018"> AY 17/18 </option>
+                <option value="AY 2018-2019"> AY 18/19 </option>
             </select>
             <div style="display: inline; margin-left: 50px;"> Semester: </div>
-            <select style="margin-left: 15px;">
+            <select style="margin-left: 15px;" id="semester">
                 <option value="Semester 1"> 1 </option>
                 <option value="Semester 2"> 2 </option>
             </select>
@@ -135,9 +135,9 @@
     </form>
     <p id="caption"> Please note that uploaded documents are subject to the admins' approval before they will be accesible to all users. </p>
 
-    //TODO: check for the most updated version of the links
+    <!--TODO: check for the most updated version of the links-->
     <script
-        src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+        src="https://www.gstatic.com/firebasejs/live/4.9/firebase.js"></script>
     <script>
         // Initialize Firebase
         const firebaseConfig = {
@@ -150,34 +150,42 @@
         appId: "1:973457443239:web:e6be93a824079bb0"
         };
         firebase.initializeApp(firebaseConfig);
-
         // Get elements
-        var form = document.getElementsByClassName('options');
-
+        var form = document.getElementById('options');
         // Listen for file selection
         form.addEventListener('submit', function(e) {
-            // Get file and reference for the elements in the form
-            var file = e.target.files[0];
-            var moduleCodeRef = document.getElementById();
-            var categoryRef = ;
-            var yearRef = ;
-            var sememsterRef = ;
-            //Create a storage reference
-            var storageRef = firebase.storage().ref();
+            // Get file
+            e.preventDefault(); 
+            var file = document.getElementById('browseFile').files[0];
+            // Reference the elements in the form
+            var moduleCodeRef = document.getElementById('search');
+            var categoryRef = document.getElementById('category');
+            var yearRef = document.getElementById('AY');
+            var semesterRef = document.getElementById('semester');
+            
+            // converting to blob, if not error (invalid argument in 'put' at index 0: expected blob or file)
+            var reader = new FileReader();
+            reader.onloadend = function (evt) {
+                var blob = new Blob([evt.target.result], { type: "application/pdf"});
+                
+                var storageURL = moduleCodeRef.value + '/' + yearRef.value + '/' + categoryRef.value + '/' + semesterRef.value + '/';
+                //console.log("path is " + moduleCodeRef.value + '/' + yearRef.value + '/' + categoryRef.value + '/' + semesterRef.value + '/' + file.name);
+                    //Create a storage reference
+                var storageRef = firebase.storage().ref(storageURL + file.name);
 
-            // TODO: form validaton  
-            // https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Form_validation
+                // TODO: form validaton  
+                // https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Form_validation
 
-            // Uploading a file, it will return "upload task"
-            // we then assign this upload task to monitor the upload progress
-            var task = storageRef.put(file);
+                // Uploading a file, it will return "upload task"
+                // we then assign this upload task to monitor the upload progress
+                var task = storageRef.put(blob);
 
-            // Update progress bar
-            // Register three observers:
-            // 1. 'state_changed' observer, called any time the state changes
-            // 2. Error observer, called on failuyre
-            // 3. Completion observer, called on successful completion
-            task.on('state_changed',
+                // Register three observers:
+                // 1. 'state_changed' observer, called any time the state changes
+                // 2. Error observer, called on failure
+                // 3. Completion observer, called on successful completion
+                    //Create a storage reference
+                task.on('state_changed',
                     
                 function progress(snapshot) {
                     // Observe state change events such as progress, pause, and resume
@@ -193,6 +201,8 @@
                             break;
                     }
                 },
+                
+
                 
                 function error(err) {
                     // Handle unsuccessful uploads
@@ -250,11 +260,17 @@
 
                 function complete() {
                     //Handle successful uploads on complete
-                    uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
                         console.log('File available at', downloadURL);
                     });
                 }
-            );             
+            );
+            }
+
+            reader.onerror = function(e) {
+                console.log("Failed file read: " + e.toString());
+            };
+            reader.readAsArrayBuffer(file);
         });
     </script>
 
@@ -263,7 +279,7 @@
 </html>
 
 <script>
-    //The search functionalities
+    // Search for modules and import it
     $(document).ready(function() {
         $.ajaxSetup({
             cache: false
@@ -281,14 +297,10 @@
             });
         });
     });
-
+    //TODO: please help the user so they don't have to type exactly the module, for example "cs2040c" instead of "CS2030"
     $('#result').on('click', 'li', function() {
         var click_text = $(this).text().split('|');
         $('#search').val($.trim(click_text[0]));
         $("#result").html('');
-        $('.toggler').show();
-        $('html, body').animate({
-            scrollTop: $('.toggler').offset().top
-        }, 'slow');
     });
 </script>
