@@ -1,6 +1,7 @@
-<html>
+<html lang="en-US">
 
 <head>
+    <meta charset="utf-8">
     <title> Forum </title>
     <style>
         @import url(http://fonts.googleapis.com/css?family=Montserrat);
@@ -29,6 +30,7 @@
 
         .logo {
             display: inline-block;
+            width: 50%;
         }
 
         #comments {
@@ -55,15 +57,44 @@
 
 <body>
     <div>
-        <a href=http://localhost:8888/home.php> <img type="logo" src=http://localhost:8888/studiy.svg alt="art"
+        <a href=http://localhost:8888/home.php> <img type="logo" src=../studiy.svg alt="art"
             style="margin-top: 0px; margin-left: 640px;" height=40px></a>
     </div>
-    <embed src="" width="550px" height="600px"
+    <embed src="../../sampleFolder/CS2040C-2017-18-S2-final.pdf" width= "550px" height="600px"
         style="margin-left: 440px; margin-top: 38px;" />
-    <p id="comments"> COMMENTS </p>
-    <div class="comments">
-        <p> Comment </p>
+    <hr />
+
     </div>
+
+    <h3>Leave a comment </h3>
+    <form id="comment">
+        <label>Message</label>
+        <textarea id="message"></textarea>
+
+        <label>Name</label>
+        <input type="text" id="email" />
+
+        <input type="submit" value="Post Comment"/>
+    </form>
+    <main class ="">
+        <!-- Show a list of recent comments-->
+        <section id="recent-comments-list" style="display:none">
+            <div class="">
+            </div>
+        </section>
+
+        <!-- Show the list of user's comment-->
+        <section id="user-comments-list" style="display:none">
+            <div class=""></div>
+        </section> 
+
+        <!-- Show the lsit of top comments-->
+        <section id="top-user-posts-list" style="display:none">
+            <div class=""></div>
+        </section>
+    </main>
+
+    
 </body>
 
 </html>
