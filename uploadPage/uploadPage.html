@@ -96,7 +96,7 @@
         <div class="spacing">
             <div style="display: inline;"> Module Code: </div>
             <input type="text" style="display: inline; width: 300px; margin-left: 15px;" name="search" id="search" placeholder="Enter Module Code" class="form-control" autocomplete="off" required />
-            <ul class="list-group" id="result" style="width: 300px; margin: 0 0 -220 135;"></ul>
+            <ul class="list-group" id="result" style="width: 300px; margin: 0 0 -220 150;"></ul>
         </div>
 
         <div class="spacing">
@@ -297,6 +297,7 @@
             });
         });
     });
+    //TODO: please help the user so they don't have to type exactly the module, for example "cs2040c" instead of "CS2030"
     $('#result').on('click', 'li', function() {
         var click_text = $(this).text().split('|');
         $('#search').val($.trim(click_text[0]));
