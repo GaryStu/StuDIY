@@ -2,7 +2,15 @@
 
 <head>
     <meta charset="utf-8">
-    <title> Forum </title>
+    <title> Document </title>
+    <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.1.0/js/md5.js"></script>
+    <script src="/js/blog.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+
     <style>
         @import url(http://fonts.googleapis.com/css?family=Montserrat);
         @import url(https://fonts.googleapis.com/css?family=Lato);
@@ -33,23 +41,244 @@
             width: 50%;
         }
 
-        #comments {
+        .commentsection {
             color: white;
-            font-size: 25px;
             font-family: 'Fira Sans', sans-serif;
-            margin-left: 30px;
-            margin-top: 30px;
+            margin-top: 40px;
+            width: 1380px;
+            margin-bottom: 60px;
+        }
+
+        header {
+            font-size: 30px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        embed {
+            border: 3px solid grey;
+        }
+
+        p {
+            text-align: center;
+            font-size: 20px;
+            margin-bottom: 0px;
+        }
+
+        a {
+            color: yellow;
+        }
+
+        .comment {
+            font-family: 'Fira Sans', sans-serif;
+            color: white;
+            border: 1px solid white;
+            padding: 3 15 10 10;
+            width: 700px;
+            align-content: left;
+            margin-bottom: 20px;
+        }
+
+        #message {
+            width: 500px;
+            height: 50px;
+            margin-left: 4u00px;
+        }
+
+        .parent {
+            text-align: center;
         }
 
         .comments {
-            background-color: grey;
-            font-family: 'Fira Sans', sans-serif;
-            margin-left: 30px;
-            color: white; 
-            width: 1350px;
-            height: 400px;
+            display: inline-block;
+        }
+
+        img[type=avatar] {
+            margin-left: -590px;
+            height: 55px;
+            width: auto;
+            border-radius: 50%;
+            margin-top: -40px;
+            margin-right: 35px;
+        }
+
+        img[type=flag] {
+            height: 25px;
+            width: auto;
+            margin-right: -660px;
+            margin-top: -60px;
+        }
+
+        label {
             font-size: 20px;
-            margin-top: -10px;
+        }
+
+        #actualcomment {
+            text-align: left;
+            margin-top: 50px;
+            margin-left: 7px;
+            font-size: 20px;
+            word-wrap: break-word;
+            width: 600px;
+        }
+
+        #time {
+            /* margin-top: -35px;
+            margin-left: -435px; */
+            font-size: 15px;
+            text-align: right;
+            margin-top: -60px;
+        }
+
+        #user {
+            margin-left: -520px;
+            margin-top: 25px;
+            font-size: 18px;
+        }
+
+        /* The Modal (background) */
+        .modal {
+            display: hidden;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            padding-top: 100px;
+            /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            position: relative;
+            background-color: #fefefe;
+            margin: auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 800px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            -webkit-animation-name: animatetop;
+            -webkit-animation-duration: 0.4s;
+            animation-name: animatetop;
+            animation-duration: 0.4s;
+            font-family: 'Fira Sans', sans-serif;
+            text-align: left;
+        }
+
+        /* Add Animation */
+        @-webkit-keyframes animatetop {
+            from {
+                top: -300px;
+                opacity: 0
+            }
+
+            to {
+                top: 0;
+                opacity: 1
+            }
+        }
+
+        @keyframes animatetop {
+            from {
+                top: -300px;
+                opacity: 0
+            }
+
+            to {
+                top: 0;
+                opacity: 1
+            }
+        }
+
+        /* The Close Button */
+        .close {
+            color: black;
+            font-size: 28px;
+            font-weight: bold;
+            float: right;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-header {
+            padding: 2px 16px;
+            background-color: white;
+            color: black;
+            font-size: 45px;
+
+        }
+
+        .modal-body {
+            padding: 2px 16px;
+            margin-top: 10px;
+            color: black;
+            font-size: 17px;
+            align-content: left;
+        }
+
+        input[type=submit] {
+            color: black;
+        }
+
+        #myBtn {
+            border: none;
+            background: transparent;
+        }
+
+        #report {
+            width: 690px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            height: 40px;
+        }
+
+        .navigation {
+            color: white;
+            font-family: 'Fira Sans', sans-serif;
+            font-size: 18px;
+            margin-left: 39px;
+            height: 40px;
+        }
+
+        .navback {
+            background-color: rgb(41, 40, 40);
+            margin-top: 8px;
+        }
+
+
+        .container {
+            display: flex;
+            width: 12%;
+            margin-left: 1210px;
+            overflow: hidden;
+            margin-top: -25px;
+        }
+
+        .button-container {
+            padding: 0px 5px;
+        }
+
+        .button-container:not(:last-child) {
+            margin-right: 7px;
+            height: 20px;
+            border-right: 0.5px solid white;
         }
     </style>
 
@@ -57,44 +286,151 @@
 
 <body>
     <div>
-        <a href=http://localhost:8888/home.php> <img type="logo" src=../studiy.svg alt="art"
-            style="margin-top: 0px; margin-left: 640px;" height=40px></a>
-    </div>
-    <embed src="../../sampleFolder/CS2040C-2017-18-S2-final.pdf" width= "550px" height="600px"
-        style="margin-left: 440px; margin-top: 38px;" />
-    <hr />
-
-    </div>
-
-    <h3>Leave a comment </h3>
-    <form id="comment">
-        <label>Message</label>
-        <textarea id="message"></textarea>
-
-        <label>Name</label>
-        <input type="text" id="email" />
-
-        <input type="submit" value="Post Comment"/>
-    </form>
-    <main class ="">
-        <!-- Show a list of recent comments-->
-        <section id="recent-comments-list" style="display:none">
-            <div class="">
+        <a href=http://localhost:8888/home.php> <img type="logo"
+            src=data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBB%0D%0AZG9iZSBJbGx1c3RyYXRvciAxNS4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9u%0D%0AOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBT%0D%0AVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzEx%0D%0ALmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3%0D%0ALnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxp%0D%0AbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB3aWR0aD0iMTAyLjI1cHgiIGhlaWdodD0iMjIuNXB4IiB2%0D%0AaWV3Qm94PSIyMi4zNjUgNTQuODY1IDEwMi4yNSAyMi41IiBlbmFibGUtYmFja2dyb3VuZD0ibmV3%0D%0AIDIyLjM2NSA1NC44NjUgMTAyLjI1IDIyLjUiDQoJIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHBh%0D%0AdGggZmlsbD0iI0VDRTcwRCIgZD0iTTI0LjQ2Niw3Mi4yNTRsMi41OTQtMy4wOTdjMS42OCwxLjMy%0D%0ALDMuNTA0LDIuMDE3LDUuNDQ3LDIuMDE3YzEuMjcyLDAsMS45NDQtMC40MzMsMS45NDQtMS4xNXYt%0D%0AMC4wNDgNCgljMC0wLjcyMi0wLjU1Mi0xLjA4LTIuODU0LTEuNjM0Yy0zLjU3Ni0wLjgxNC02LjMz%0D%0AOC0xLjgyMi02LjMzOC01LjI1N3YtMC4wNDhjMC0zLjEyLDIuNDc0LTUuMzc3LDYuNTA2LTUuMzc3%0D%0ADQoJYzIuODU0LDAsNS4wODgsMC43NzEsNi45MTEsMi4yMzJsLTIuMzI2LDMuMjg4Yy0xLjUzNi0x%0D%0ALjEwNC0zLjIxOC0xLjY1Ni00LjcwNS0xLjY1NmMtMS4xMjgsMC0xLjY4MiwwLjQ1Ni0xLjY4Miwx%0D%0ALjA4djAuMDQ5DQoJYzAsMC43NjgsMC41NzYsMS4xMDQsMi45MywxLjYzMmMzLjg0LDAuODQsNi4y%0D%0AMzksMi4wODgsNi4yMzksNS4yMzJ2MC4wNDhjMCwzLjQzMy0yLjcxMiw1LjQ3My02Ljc5Miw1LjQ3%0D%0AMw0KCUMyOS4zNjIsNzUuMDM4LDI2LjU1NCw3NC4xMDEsMjQuNDY2LDcyLjI1NHoiLz4NCjxwYXRo%0D%0AIGZpbGw9IiNFQ0U3MEQiIGQ9Ik00NS4wMSw2Mi4wMjloLTUuMDE2di00LjA4MWgxNC43MTN2NC4w%0D%0AODFoLTUuMDQxVjc0Ljc1SDQ1LjAxVjYyLjAyOXoiLz4NCjxwYXRoIGZpbGw9IiNFQ0U3MEQiIGQ9%0D%0AIk01Ni41NTMsNjcuMzgydi05LjQzNGg0LjcwM3Y5LjMzN2MwLDIuNDI1LDEuMjI2LDMuNTc2LDMu%0D%0AMDk4LDMuNTc2YzEuODk2LDAsMy4xMjEtMS4xMDQsMy4xMjEtMy40NTZ2LTkuNDU3DQoJaDQuNzA1%0D%0AdjkuMzEyYzAsNS40LTMuMDk5LDcuODAzLTcuODczLDcuODAzQzU5LjU1NCw3NS4wNjIsNTYuNTUz%0D%0ALDcyLjYzNyw1Ni41NTMsNjcuMzgyeiIvPg0KPHBhdGggZmlsbD0iI0VDRTcwRCIgZD0iTTc0Ljkz%0D%0ANyw1Ny45NDhoNi41MDVjNS45NzcsMCw5LjQ1NywzLjQ1Nyw5LjQ1Nyw4LjMwNXYwLjA0OGMwLDQu%0D%0AODUxLTMuNTI4LDguNDQ5LTkuNTU0LDguNDQ5aC02LjQwOFY1Ny45NDgNCgl6IE03OS41OTQsNjIu%0D%0AMDUydjguNTY5aDEuODk2YzIuODA5LDAsNC42NTYtMS41MzYsNC42NTYtNC4yNDl2LTAuMDQ4YzAt%0D%0AMi42ODgtMS44NS00LjI3Mi00LjY1Ni00LjI3Mkg3OS41OTR6Ii8+DQo8cGF0aCBmaWxsPSIjRUNF%0D%0ANzBEIiBkPSJNOTMuNDQxLDU3Ljk0OGg0LjY1NlY3NC43NWgtNC42NTZWNTcuOTQ4eiIvPg0KPHBh%0D%0AdGggZmlsbD0iI0VDRTcwRCIgZD0iTTEwNi4wNDIsNjguNDYybC02LjQwOC0xMC41MTRoNS4zMDds%0D%0AMy40NTYsNi4xMjFsMy40NzktNi4xMjFoNS4yMDhsLTYuMzg1LDEwLjQ0MXY2LjM1OGgtNC42NTZW%0D%0ANjguNDYyDQoJTDEwNi4wNDIsNjguNDYyeiIvPg0KPGNpcmNsZSBmaWxsPSIjRUNFNzBEIiBjeD0i%0D%0AMTE4LjAyNSIgY3k9IjcxLjgwNiIgcj0iMi45NDIiLz4NCjwvc3ZnPg0K
+            alt="art" style="margin-top: 12px; margin-left: 30px;" height=55px></a>
+        <br>
+        <div class="navback">
+            <div class="navigation">
+                <a style="display: inline-block; margin-right: 40px; color: white; margin-top: 8px;"> Lecture Notes</a>
+                <a style="display: inline-block; margin-right: 40px; color: white;"> Tutorials </a>
+                <a style="display: inline-block; margin-right: 40px; color: white;"> Past Year Papers </a>
+                <a style="display: inline-block; margin-right: 40px; color: white;"> Extra Practice </a>
+                <a style="display: inline-block; margin-right: 40px; color: white;"> Miscellaneous </a>
+                <a style="display: inline-block; margin-right: 200px; color: white;"> Forum </a>
+                <div class="container">
+                    <div class="button-container"><a
+                            style="display: inline-block; margin-right: 5px; color: white; margin-top: -1px;" href=http://localhost:8888/home.php> <img
+                                src="http://codeitdown.com/media/Home_Icon.svg" style="height: 25px; width: auto;" type = "logo"
+                                /></a></div>
+                    <div class="button-container"><a style="display: inline-block; color: white;"> Sign Out </a></div>
+                </div>
             </div>
-        </section>
-
-        <!-- Show the list of user's comment-->
-        <section id="user-comments-list" style="display:none">
-            <div class=""></div>
-        </section> 
-
-        <!-- Show the lsit of top comments-->
-        <section id="top-user-posts-list" style="display:none">
-            <div class=""></div>
-        </section>
-    </main>
-
+        </div>
+    </div>
     
+    <embed src="file:///Users/keiftan/Downloads/NTU%20Maritime%20Case%20Comp%20(1).pdf" width="560px" height="650px"
+        style="margin-left: 450px; margin-top: 45px;" />
+
+    <div class="parent">
+        <div class="commentsection">
+            <header style="margin-top: 0px; margin-left: 450px; "> Leave a comment </header>
+            <form id="comment">
+                <label for="message" style="margin-bottom: 30px; margin-left: -400px;">Message</label>
+                <br>
+                <textarea id="message" style="color: black; height: 100px; margin-left: 290px; width: 560px;" placeholder="Enter a comment"></textarea>
+
+                <label for="name">Name</label>
+                <input type="text" id="name" style="color: black; margin-bottom: 30px;" autocomplete="off">
+                <br>
+
+                <input type="submit" value="Post Comment" style="margin-left: 520px;">
+            </form>
+        </div>
+    </div>
+
+    <hr style="width: 500px; margin-bottom: 60px;">
+
+    <div class="parent">
+        <div class="comments"> </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2>Report comment</h2>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 17px; text-align: left;">Choose a reason for reporting this comment</p>
+                <select style="margin-left: 0px; margin-top: 5px;" id="reporting">
+                    <option value="AY 2012-2013"> Abuse </option>
+                    <option value="AY 2013-2014"> Spam </option>
+                    <option value="AY 2014-2015"> Off Topic </option>
+                </select>
+                <hr>
+                <p style="font-size: 17px; text-align: left;"> What would you like to report? </p>
+                <input type="text" name="report" id="report"
+                    placeholder="Please provide details about the comment or account you are reporting."
+                    style="font-size: 15px; text-align: initial;" autocomplete="off">
+                <input type="submit" value="Submit">
+            </div>
+        </div>
+    </div>
 </body>
+
+<script>
+    $(function () {
+        var ref = new Firebase("https://studiy.firebaseio.com/"),
+            postRef = ref.child(slugify(window.location.pathname));
+
+
+        postRef.on("child_added", function (snapshot) {
+            var newPost = snapshot.val();
+            $(".comments").prepend(
+                '<div class="comment">' +
+                '<p id = "user">' + escapeHtml(newPost.name) + '</p>' +
+                '<div class="profile-image"><img type = "avatar" src="http://www.gravatar.com/avatar/' + '?s=100&d=retro"/></div> ' +
+                '<p id = "time">' + moment(newPost.postedAt).fromNow() + '</p><p id = "actualcomment">' + escapeHtml(newPost.message) + '</p></div>' +
+                '<button id = "myBtn"><img type = "flag" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/emojione/211/triangular-flag-on-post_1f6a9.png" style = "margin-left: 5px;" /></button>');
+        });
+
+        $("#comment").submit(function () {
+            var a = postRef.push();
+
+            a.set({
+                name: $("#name").val(),
+                message: $("#message").val(),
+                postedAt: Firebase.ServerValue.TIMESTAMP
+            });
+
+            $("input[type=text], textarea").val("");
+            return false;
+        });
+    });
+
+    function slugify(text) {
+        return text.toString().toLowerCase().trim()
+            .replace(/&/g, '-and-')
+            .replace(/[\s\W-]+/g, '-')
+            .replace(/[^a-zA-Z0-9-_]+/g, '');
+    }
+
+
+    function escapeHtml(str) {
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
+    }
+
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    /* var btn = document.getElementById("myBtn"); */
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal
+    $('.comments').on('click', function () {
+        modal.style.display = "block";
+    });
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    } 
+</script>
 
 </html>
