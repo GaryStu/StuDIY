@@ -89,6 +89,7 @@ function toggleStar(postRef, uid) {
 function createPostElement(postId, title, text, author, authorId, authorPic) {
   var uid = firebase.auth().currentUser.uid;
 
+  //html structure of a post element
   var html =
       '<div class="post post-' + postId + ' mdl-cell mdl-cell--12-col ' +
                   'mdl-cell--6-col-tablet mdl-cell--4-col-desktop mdl-grid mdl-grid--no-spacing">' +
@@ -262,6 +263,7 @@ function deleteComment(postElement, id) {
 function startDatabaseQueries() {
   // [START my_top_posts_query]
   var myUserId = firebase.auth().currentUser.uid;
+  // Sorting the entries
   var topUserPostsRef = firebase.database().ref('user-posts/' + myUserId).orderByChild('starCount');
   // [END my_top_posts_query]
   // [START recent_posts_query]
@@ -347,17 +349,20 @@ function onAuthStateChanged(user) {
     return;
   }
 
+  
   cleanupUi();
+  // if there is a signed-in user, start listening for database queries
+  // else we display the splash page
   if (user) {
     currentUID = user.uid;
-    splashPage.style.display = 'none';
+    //splashPage.style.display = 'none';
     writeUserData(user.uid, user.displayName, user.email, user.photoURL);
     startDatabaseQueries();
   } else {
     // Set currentUID to null.
     currentUID = null;
     // Display the splash page where you can sign-in.
-    splashPage.style.display = '';
+    //splashPage.style.display = '';
   }
 }
 

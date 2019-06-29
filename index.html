@@ -2,7 +2,6 @@
 
 <head>
     <title> StuDIY </title>
-    <link rel="stylesheet" href="css/style.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
@@ -163,45 +162,44 @@
     <div>
         <a href="#"> <button class="loginbutton"> Sign in with NUS </button></a>
         <div class="container">
-            <div class="button-container"><a href="/upload.php"><button class="buttons">Upload Files</button></a></div>
+            <div class="button-container"><a href="uploadPage/uploadPage.html"><button class="buttons">Upload Files</button></a></div>
             <div class="button-container"><button class="buttons">About Us</button></div>
         </div>
     </div>
     <div>
-        <img src=http://localhost:8888/studiy.svg alt="art" style="margin: 210 0 40 530;" height=80px>
+        <img src=studiy.svg alt="art" style="margin: 210 0 40 530;" height=80px>
     </div>
     <input type="text" name="search" id="search" placeholder="Enter Module Code" class="form-control" autocomplete="off" />
     <ul class="list-group" id="result" style="width: 627px; margin: 0 0 0 402;"></ul>
 
+
     <div class="toggler">
         <header type="content"><b> Contents </b></header>
         <button class="collapsible"> Lecture Notes </button>
-        <div class="content">
-            <p>Year</p>
+        <div class="content" id="LectureNotes">
         </div>
         <button class="collapsible"> Tutorials </button>
-        <div class="content">
-            <p>Year</p>
+        <div class="content" id="Tutorials">
         </div>
-        <button class="collapsible"> Past Year Papers </button>
-        <div class="content">
-            <p>Year</p>
+        <button class="collapsible" > Past Year Papers </button>
+        <div class="content" id="PYP">
         </div>
         <button class="collapsible"> Extra Practice </button>
-        <div class="content">
-            <p>Year</p>
+        <div class="content" id="ExtraPractice">
         </div>
         <button class="collapsible"> Miscellaneous </button>
-        <div class="content">
-            <p>Year</p>
+        <div class="content" id="Misc">
         </div>
         <br>
+        
         <p id="forum"> Or check out the <a href="/forum.php" style="color: yellow"> FORUM</a> instead! </p>
     </div>
 </body>
 
 </html>
-
+<script src="https://www.gstatic.com/firebasejs/6.2.3/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.2.3/firebase-storage.js"></script>
+<script src=script.js></script>
 <script>
     $(document).ready(function() {
         $.ajaxSetup({
@@ -231,18 +229,5 @@
         }, 'slow');
     });
 
-    var coll = document.getElementsByClassName("collapsible");
-    var i;
-
-    for (i = 0; i < coll.length; i++) {
-        coll[i].addEventListener("click", function() {
-            this.classList.toggle("active");
-            var content = this.nextElementSibling;
-            if (content.style.maxHeight) {
-                content.style.maxHeight = null;
-            } else {
-                content.style.maxHeight = content.scrollHeight + "px";
-            }
-        });
-    }
+    
 </script>
