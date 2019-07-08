@@ -361,7 +361,7 @@
                 <input type="text" name="report" id="report"
                     placeholder="Please provide details about the comment or account you are reporting."
                     style="font-size: 15px; text-align: initial;" autocomplete="off">
-                <input type="submit" value="Submit">
+                <input type="submit" value= "Submit">
             </div>
         </div>
     </div>
@@ -385,7 +385,8 @@
             a.set({
                 name: $("#name").val(),
                 message: $("#message").val(),
-                postedAt: Firebase.ServerValue.TIMESTAMP
+                postedAt: Firebase.ServerValue.TIMESTAMP,
+                address: document.location.href,
             });
             $("input[type=text], textarea").val("");
             return false;
