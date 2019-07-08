@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title> Document </title>
+    <title> Viewer </title>
     <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.0/moment.min.js"></script>
@@ -17,9 +17,11 @@
         @import url(https://fonts.googleapis.com/css?family=PT+Sans);
         @import url(https://fonts.googleapis.com/css?family=Noto+Sans+SC);
         @import url(https://fonts.googleapis.com/css?family=Fira+Sans);
+
         body {
             background-color: #222121;
         }
+
         .loginbutton {
             font-size: 16px;
             font-family: 'PT Sans', sans-serif;
@@ -33,10 +35,12 @@
             border-radius: 5px;
             padding: 0 16.5 0 16.5;
         }
+
         .logo {
             display: inline-block;
             width: 50%;
         }
+
         .commentsection {
             color: white;
             font-family: 'Fira Sans', sans-serif;
@@ -44,6 +48,7 @@
             width: 1380px;
             margin-bottom: 60px;
         }
+
         header {
             font-size: 30px;
             margin-bottom: 15px;
@@ -73,6 +78,7 @@
             align-content: left;
             margin-bottom: 20px;
         }
+
         #message {
             width: 500px;
             height: 50px;
@@ -95,6 +101,7 @@
             margin-top: -40px;
             margin-right: 35px;
         }
+
         img[type=flag] {
             height: 25px;
             width: auto;
@@ -114,6 +121,7 @@
             word-wrap: break-word;
             width: 600px;
         }
+
         #time {
             /* margin-top: -35px;
             margin-left: -435px; */
@@ -121,11 +129,12 @@
             text-align: right;
             margin-top: -60px;
         }
+
         #user {
-            margin-left: -520px;
             margin-top: 25px;
             font-size: 18px;
         }
+
         /* The Modal (background) */
         .modal {
             display: hidden;
@@ -149,6 +158,7 @@
             background-color: rgba(0, 0, 0, 0.4);
             /* Black w/ opacity */
         }
+
         /* Modal Content */
         .modal-content {
             position: relative;
@@ -165,27 +175,32 @@
             font-family: 'Fira Sans', sans-serif;
             text-align: left;
         }
+
         /* Add Animation */
         @-webkit-keyframes animatetop {
             from {
                 top: -300px;
                 opacity: 0
             }
+
             to {
                 top: 0;
                 opacity: 1
             }
         }
+
         @keyframes animatetop {
             from {
                 top: -300px;
                 opacity: 0
             }
+
             to {
                 top: 0;
                 opacity: 1
             }
         }
+
         /* The Close Button */
         .close {
             color: black;
@@ -193,12 +208,14 @@
             font-weight: bold;
             float: right;
         }
+
         .close:hover,
         .close:focus {
             color: #000;
             text-decoration: none;
             cursor: pointer;
         }
+
         .modal-header {
             padding: 2px 16px;
             background-color: white;
@@ -223,12 +240,14 @@
             border: none;
             background: transparent;
         }
+
         #report {
             width: 690px;
             margin-top: 5px;
             margin-bottom: 10px;
             height: 40px;
         }
+
         .navigation {
             color: white;
             font-family: 'Fira Sans', sans-serif;
@@ -236,6 +255,7 @@
             margin-left: 39px;
             height: 40px;
         }
+
         .navback {
             background-color: rgb(41, 40, 40);
             margin-top: 8px;
@@ -249,13 +269,21 @@
             overflow: hidden;
             margin-top: -25px;
         }
+
         .button-container {
             padding: 0px 5px;
         }
+
         .button-container:not(:last-child) {
             margin-right: 7px;
             height: 20px;
             border-right: 0.5px solid white;
+        }
+
+        input[type=image] {
+            margin-left: 1500px;
+            height: 25px;
+            width: 25px;
         }
     </style>
 
@@ -263,7 +291,7 @@
 
 <body>
     <div>
-        <a href=http://localhost:8888/home.php> <img type="logo"
+        <a href=/Users/keiftan/Downloads/StuDIY-master/index.html> <img type="logo"
             src=data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBB%0D%0AZG9iZSBJbGx1c3RyYXRvciAxNS4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9u%0D%0AOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBT%0D%0AVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzEx%0D%0ALmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3%0D%0ALnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxp%0D%0AbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB3aWR0aD0iMTAyLjI1cHgiIGhlaWdodD0iMjIuNXB4IiB2%0D%0AaWV3Qm94PSIyMi4zNjUgNTQuODY1IDEwMi4yNSAyMi41IiBlbmFibGUtYmFja2dyb3VuZD0ibmV3%0D%0AIDIyLjM2NSA1NC44NjUgMTAyLjI1IDIyLjUiDQoJIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHBh%0D%0AdGggZmlsbD0iI0VDRTcwRCIgZD0iTTI0LjQ2Niw3Mi4yNTRsMi41OTQtMy4wOTdjMS42OCwxLjMy%0D%0ALDMuNTA0LDIuMDE3LDUuNDQ3LDIuMDE3YzEuMjcyLDAsMS45NDQtMC40MzMsMS45NDQtMS4xNXYt%0D%0AMC4wNDgNCgljMC0wLjcyMi0wLjU1Mi0xLjA4LTIuODU0LTEuNjM0Yy0zLjU3Ni0wLjgxNC02LjMz%0D%0AOC0xLjgyMi02LjMzOC01LjI1N3YtMC4wNDhjMC0zLjEyLDIuNDc0LTUuMzc3LDYuNTA2LTUuMzc3%0D%0ADQoJYzIuODU0LDAsNS4wODgsMC43NzEsNi45MTEsMi4yMzJsLTIuMzI2LDMuMjg4Yy0xLjUzNi0x%0D%0ALjEwNC0zLjIxOC0xLjY1Ni00LjcwNS0xLjY1NmMtMS4xMjgsMC0xLjY4MiwwLjQ1Ni0xLjY4Miwx%0D%0ALjA4djAuMDQ5DQoJYzAsMC43NjgsMC41NzYsMS4xMDQsMi45MywxLjYzMmMzLjg0LDAuODQsNi4y%0D%0AMzksMi4wODgsNi4yMzksNS4yMzJ2MC4wNDhjMCwzLjQzMy0yLjcxMiw1LjQ3My02Ljc5Miw1LjQ3%0D%0AMw0KCUMyOS4zNjIsNzUuMDM4LDI2LjU1NCw3NC4xMDEsMjQuNDY2LDcyLjI1NHoiLz4NCjxwYXRo%0D%0AIGZpbGw9IiNFQ0U3MEQiIGQ9Ik00NS4wMSw2Mi4wMjloLTUuMDE2di00LjA4MWgxNC43MTN2NC4w%0D%0AODFoLTUuMDQxVjc0Ljc1SDQ1LjAxVjYyLjAyOXoiLz4NCjxwYXRoIGZpbGw9IiNFQ0U3MEQiIGQ9%0D%0AIk01Ni41NTMsNjcuMzgydi05LjQzNGg0LjcwM3Y5LjMzN2MwLDIuNDI1LDEuMjI2LDMuNTc2LDMu%0D%0AMDk4LDMuNTc2YzEuODk2LDAsMy4xMjEtMS4xMDQsMy4xMjEtMy40NTZ2LTkuNDU3DQoJaDQuNzA1%0D%0AdjkuMzEyYzAsNS40LTMuMDk5LDcuODAzLTcuODczLDcuODAzQzU5LjU1NCw3NS4wNjIsNTYuNTUz%0D%0ALDcyLjYzNyw1Ni41NTMsNjcuMzgyeiIvPg0KPHBhdGggZmlsbD0iI0VDRTcwRCIgZD0iTTc0Ljkz%0D%0ANyw1Ny45NDhoNi41MDVjNS45NzcsMCw5LjQ1NywzLjQ1Nyw5LjQ1Nyw4LjMwNXYwLjA0OGMwLDQu%0D%0AODUxLTMuNTI4LDguNDQ5LTkuNTU0LDguNDQ5aC02LjQwOFY1Ny45NDgNCgl6IE03OS41OTQsNjIu%0D%0AMDUydjguNTY5aDEuODk2YzIuODA5LDAsNC42NTYtMS41MzYsNC42NTYtNC4yNDl2LTAuMDQ4YzAt%0D%0AMi42ODgtMS44NS00LjI3Mi00LjY1Ni00LjI3Mkg3OS41OTR6Ii8+DQo8cGF0aCBmaWxsPSIjRUNF%0D%0ANzBEIiBkPSJNOTMuNDQxLDU3Ljk0OGg0LjY1NlY3NC43NWgtNC42NTZWNTcuOTQ4eiIvPg0KPHBh%0D%0AdGggZmlsbD0iI0VDRTcwRCIgZD0iTTEwNi4wNDIsNjguNDYybC02LjQwOC0xMC41MTRoNS4zMDds%0D%0AMy40NTYsNi4xMjFsMy40NzktNi4xMjFoNS4yMDhsLTYuMzg1LDEwLjQ0MXY2LjM1OGgtNC42NTZW%0D%0ANjguNDYyDQoJTDEwNi4wNDIsNjguNDYyeiIvPg0KPGNpcmNsZSBmaWxsPSIjRUNFNzBEIiBjeD0i%0D%0AMTE4LjAyNSIgY3k9IjcxLjgwNiIgcj0iMi45NDIiLz4NCjwvc3ZnPg0K
             alt="art" style="margin-top: 12px; margin-left: 30px;" height=55px></a>
         <br>
@@ -277,18 +305,16 @@
                 <a style="display: inline-block; margin-right: 200px; color: white;"> Forum </a>
                 <div class="container">
                     <div class="button-container"><a
-                            style="display: inline-block; margin-right: 5px; color: white; margin-top: -1px;" href=../index.html> <img
-                                src="http://codeitdown.com/media/Home_Icon.svg" style="height: 25px; width: auto;" type = "logo"
-                                /></a></div>
+                            style="display: inline-block; margin-right: 5px; color: white; margin-top: -1px;"
+                            href=../index.html> <img src="http://codeitdown.com/media/Home_Icon.svg"
+                            style="height: 25px; width: auto;" type="logo" /></a></div>
                     <div class="button-container"><a style="display: inline-block; color: white;"> Sign Out </a></div>
                 </div>
             </div>
         </div>
     </div>
-    
-    <embed src="" width="560px" height="650px"
 
-        style="margin-left: 450px; margin-top: 45px;" id="viewer" />
+    <embed src="" width="560px" height="650px" style="margin-left: 450px; margin-top: 45px;" id="viewer" />
 
     <div class="parent">
         <div class="commentsection">
@@ -296,7 +322,8 @@
             <form id="comment">
                 <label for="message" style="margin-bottom: 30px; margin-left: -400px;">Message</label>
                 <br>
-                <textarea id="message" style="color: black; height: 100px; margin-left: 290px; width: 560px;" placeholder="Enter a comment"></textarea>
+                <textarea id="message" style="color: black; height: 100px; margin-left: 290px; width: 560px;"
+                    placeholder="Enter a comment"></textarea>
 
                 <label for="name">Name</label>
                 <input type="text" id="name" style="color: black; margin-bottom: 30px;" autocomplete="off">
@@ -348,10 +375,10 @@
             var newPost = snapshot.val();
             $(".comments").prepend(
                 '<div class="comment">' +
-                '<p id = "user">' + escapeHtml(newPost.name) + '</p>' +
+                '<p id = "user" style = "text-align: left; margin-left: 60px;">' + escapeHtml(newPost.name) + '</p>' +
                 '<div class="profile-image"><img type = "avatar" src="http://www.gravatar.com/avatar/' + '?s=100&d=retro"/></div> ' +
-                '<p id = "time">' + moment(newPost.postedAt).fromNow() + '</p><p id = "actualcomment">' + escapeHtml(newPost.message) + '</p></div>' +
-                '<button id = "myBtn"><img type = "flag" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/emojione/211/triangular-flag-on-post_1f6a9.png" style = "margin-left: 5px;" /></button>');
+                '<p id = "time">' + moment(newPost.postedAt).fromNow() + '</p><p id = "actualcomment">' + escapeHtml(newPost.message) + '</p>' +
+                '<input type = "image" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/emojione/211/triangular-flag-on-post_1f6a9.png" style = "margin-left: 650px;" /></div>');
         });
         $("#comment").submit(function () {
             var a = postRef.push();
@@ -382,7 +409,7 @@
     // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
     // When the user clicks the button, open the modal
-    $('.comments').on('click', function () {
+    $('.comments').on('click', 'input[type=image]', function () {
         modal.style.display = "block";
     });
     // When the user clicks on <span> (x), close the modal
@@ -394,20 +421,20 @@
         if (event.target == modal) {
             modal.style.display = "none";
         }
-    } 
+    }
 
     //parsing and displaying data from index.html
     window.onload = function () {
-      let url = document.location.href;
-      let params = url.split('?')[1].split('&');
-      let viewURL = decodeURIComponent(params[0]);
-      viewURL = viewURL.substr(4);
+        let url = document.location.href;
+        let params = url.split('?')[1].split('&');
+        let viewURL = decodeURIComponent(params[0]);
+        viewURL = viewURL.substr(4);
 
-      //replacing the empty <embed>
-      let oldViewer = document.getElementById('viewer');
-      let newViewer = oldViewer.cloneNode(true);
-      newViewer.setAttribute('src', viewURL);
-      oldViewer.parentNode.replaceChild(newViewer, oldViewer);
+        //replacing the empty <embed>
+        let oldViewer = document.getElementById('viewer');
+        let newViewer = oldViewer.cloneNode(true);
+        newViewer.setAttribute('src', viewURL);
+        oldViewer.parentNode.replaceChild(newViewer, oldViewer);
     }
 </script>
 
