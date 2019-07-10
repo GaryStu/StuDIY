@@ -361,25 +361,39 @@
                 <input type="text" name="report" id="report"
                     placeholder="Please provide details about the comment or account you are reporting."
                     style="font-size: 15px; text-align: initial;" autocomplete="off">
-                <input type="submit" value= "Submit">
+                <input type="submit" value="Submit">
             </div>
         </div>
     </div>
 </body>
 
+</html>
+<script src="https://www.gstatic.com/firebasejs/6.2.3/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.2.3/firebase-database.js"></script>
+<script src=script.js></script>
+
+<script src=script.js></script>
 <script>
     $(function () {
-        var ref = new Firebase("https://studiy.firebaseio.com/"),
-            postRef = ref.child(slugify(window.location.pathname));
-        postRef.on("child_added", function (snapshot) {
-            var newPost = snapshot.val();
-            $(".comments").prepend(
-                '<div class="comment">' +
-                '<p id = "user" style = "text-align: left; margin-left: 60px;">' + escapeHtml(newPost.name) + '</p>' +
-                '<div class="profile-image"><img type = "avatar" src="http://www.gravatar.com/avatar/' + '?s=100&d=retro"/></div> ' +
-                '<p id = "time">' + moment(newPost.postedAt).fromNow() + '</p><p id = "actualcomment">' + escapeHtml(newPost.message) + '</p>' +
-                '<input type = "image" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/emojione/211/triangular-flag-on-post_1f6a9.png" style = "margin-left: 650px;" /></div>');
+        var commentsRef = database.ref("-users-keiftan-downloads-studiy-master-pdfviewer-pdfviewer-html");
+        commentsRef.on("value", function (snapshot) {
+            snapshot.forEach(function (childSnapshot) {
+                var childData = childSnapshot.val();
+                if (childData.address == document.location.href) {
+                    $(".comments").prepend(
+                        '<div class="comment">' +
+                        '<p id = "user" style = "text-align: left; margin-left: 60px;">' + escapeHtml(childData.name) + '</p>' +
+                        '<div class="profile-image"><img type = "avatar" src="http://www.gravatar.com/avatar/' + '?s=100&d=retro"/></div> ' +
+                        '<p id = "time">' + moment(childData.postedAt).fromNow() + '</p><p id = "actualcomment">' + escapeHtml(childData.message) + '</p>' +
+                        '<input type = "image" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/emojione/211/triangular-flag-on-post_1f6a9.png" style = "margin-left: 650px;" /></div>');
+
+                };
+            });
         });
+
+        var ref = new Firebase("https://studiy.firebaseio.com/");
+        postRef = ref.child(slugify(window.location.pathname));
+
         $("#comment").submit(function () {
             var a = postRef.push();
             a.set({
@@ -438,5 +452,3 @@
         oldViewer.parentNode.replaceChild(newViewer, oldViewer);
     }
 </script>
-
-</html>
