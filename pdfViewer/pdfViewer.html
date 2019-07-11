@@ -251,9 +251,11 @@
         .navigation {
             color: white;
             font-family: 'Fira Sans', sans-serif;
-            font-size: 18px;
+            font-size: 19.5px;
             margin-left: 39px;
             height: 40px;
+            display: block;
+            margin-top: 8px;
         }
 
         .navback {
@@ -264,17 +266,19 @@
 
         .container {
             display: flex;
-            width: 12%;
-            margin-left: 1210px;
+            width: 13%;
+            margin-left: 1205px;
             overflow: hidden;
             margin-top: -25px;
         }
 
         .button-container {
-            padding: 0px 5px;
+            padding: 0px 4px;
+            margin-top: -5px;
         }
 
         .button-container:not(:last-child) {
+            margin-top: -2px;
             margin-right: 7px;
             height: 20px;
             border-right: 0.5px solid white;
@@ -284,6 +288,38 @@
             margin-left: 1500px;
             height: 25px;
             width: 25px;
+        }
+
+        button {
+            background: none;
+            border: none;
+            display: inline-block;
+            outline: none;
+        }
+
+        button:hover {
+            background-color: grey;
+        }
+
+        button:focus {
+            background-color: grey;
+        }
+
+        #LectureNotes a,
+        #Tutorials a,
+        #PYP a,
+        #ExtraPractice a,
+        #Misc a {
+            color: black;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            text-align: left;
+            background-color: white;
+            width: 90%;
+            margin-top: 7px;
         }
     </style>
 
@@ -297,18 +333,47 @@
         <br>
         <div class="navback">
             <div class="navigation">
-                <a style="display: inline-block; margin-right: 40px; color: white; margin-top: 8px;"> Lecture Notes</a>
-                <a style="display: inline-block; margin-right: 40px; color: white;"> Tutorials </a>
-                <a style="display: inline-block; margin-right: 40px; color: white;"> Past Year Papers </a>
-                <a style="display: inline-block; margin-right: 40px; color: white;"> Extra Practice </a>
-                <a style="display: inline-block; margin-right: 40px; color: white;"> Miscellaneous </a>
-                <a style="display: inline-block; margin-right: 200px; color: white;"> Forum </a>
+                <button class="dropBtn"
+                    style="display: inline-block; margin-right: 25px; margin-top: 6px; color: white;"
+                    onclick="lectureDropdown()"> Lecture Notes </button>
+                <div id="LectureNotes" class="dropdown-content">
+                    <a> Hi </a>
+                </div>
+                <button class="dropBtn" style="display: inline-block; margin-right: 40px; color: white;"
+                    onclick="tutorialDropdown()">
+                    Tutorials
+                </button>
+                <div id="Tutorials" class="dropdown-content">
+                    <a> Hii </a>
+                </div>
+                <button style="display: inline; margin-right: 40px; color: white;" onclick="pypDropdown()"
+                    class="dropBtn"> Past Year
+                    Papers </button>
+                <div id="PYP" class="dropdown-content">
+                    <a> Hiii </a>
+                </div>
+                <button style="display: inline; margin-right: 40px; color: white;" onclick="extraDropdown()"
+                    class="dropBtn"> Extra
+                    Practice
+                </button>
+                <div id="ExtraPractice" class="dropdown-content">
+                    <a> Bye </a>
+                </div>
+                <button style="display: inline; margin-right: 40px; color: white;" onclick="miscDropdown()"
+                    class="dropBtn">
+                    Miscellaneous
+                </button>
+                <div id="Misc" class="dropdown-content">
+                    <a> Byee </a>
+                </div>
+                <a style="display: inline; margin-right: 200px; color: white;"> Forum </a>
                 <div class="container">
                     <div class="button-container"><a
-                            style="display: inline-block; margin-right: 5px; color: white; margin-top: -1px;"
+                            style="display: inline-block; margin-left: 20px; margin-right: 5px; color: white; margin-top: -1px;"
                             href=../index.html> <img src="http://codeitdown.com/media/Home_Icon.svg"
                             style="height: 25px; width: auto;" type="logo" /></a></div>
-                    <div class="button-container"><a style="display: inline-block; color: white;"> Sign Out </a></div>
+                    <div class="button-container"><a style="display: inline-block; color: white; margin-top: 1.5px;">
+                            Sign Out </a></div>
                 </div>
             </div>
         </div>
@@ -372,8 +437,36 @@
 <script src="https://www.gstatic.com/firebasejs/6.2.3/firebase-database.js"></script>
 <script src=script.js></script>
 
-<script src=script.js></script>
 <script>
+    function lectureDropdown() {
+        document.getElementById("LectureNotes").classList.toggle("show");
+    }
+    function tutorialDropdown() {
+        document.getElementById("Tutorials").classList.toggle("show");
+    }
+    function pypDropdown() {
+        document.getElementById("PYP").classList.toggle("show");
+    }
+    function extraDropdown() {
+        document.getElementById("ExtraPractice").classList.toggle("show");
+    }
+    function miscDropdown() {
+        document.getElementById("Misc").classList.toggle("show");
+    }
+    $(document).on('click', function (event) {
+        if (!event.target.closest('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    });
+    
+    //To retrieve comments from firebase
     $(function () {
         var commentsRef = database.ref("-users-keiftan-downloads-studiy-master-pdfviewer-pdfviewer-html");
         commentsRef.on("value", function (snapshot) {
