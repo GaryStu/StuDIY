@@ -172,21 +172,30 @@ for (i = 0; i < coll.length; i++) {
             miscStatus = true;
             // Create a reference under which you want to list
             var listRef = firebase.storage().ref().child(moduleCode + '/' + 'miscellaneous');
-            
+            var itemArray = []; 
+            itemArray.sort(function (a, b) {
+                a.year - b.year;
+            });
+            itemArray.sort(function (a, b) {
+                
+            })
             // Find all the prefixes and items.
             listRef.listAll().then(
             function(res) {
             res.items.forEach(function(itemRef) {
-                // All the items under listRef.
-                console.log(itemRef.fullPath);
                 // Populating the categories with links
-                let br = document.createElement('br');
-                let a = document.createElement('a');
-                let linkText = document.createTextNode(itemRef.fullPath);
-                a.appendChild(linkText);
-                a.href = "";
-                miscElement.appendChild(a);
-                miscElement.appendChild(br);
+                itemRef.getDownloadURL().then(function(url) {
+                    //using the GET method to concatenate the link url of the pdf that will be opened in pdfViewer
+                    viewerUrl = 'pdfViewer/pdfViewer.html?name' + encodeURIComponent(url);
+                    // Populating the categories with links
+                    let br = document.createElement('br');
+                    let a = document.createElement('a');
+                    let linkText = document.createTextNode(itemRef.fullPath);
+                    a.appendChild(linkText);
+                    a.href = viewerUrl;
+                    miscElement.appendChild(a);
+                    miscElement.appendChild(br);
+                });
 
             });
             }).catch(function(error) {

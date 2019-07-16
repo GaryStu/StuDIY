@@ -162,7 +162,7 @@
         <div class="spacing">
             <div style="display: inline;" required> Title: </div>
             <input type="text" style="margin-left: 66px; margin-top: -30px; width: 382px;" name="search"
-                placeholder="Enter Title" class="form-control" autocomplete="off" required />
+                placeholder="Enter Title" class="form-control" autocomplete="off" id="displayTitle" required />
         </div>
         <div class="spacing">
             <input type="submit" value="Upload" id="submitButton">
@@ -197,6 +197,8 @@
             var categoryRef = document.getElementById('category');
             var yearRef = document.getElementById('AY');
             var semesterRef = document.getElementById('semester');
+            var displayTitleRef = document.getElementById('displayTitle');
+            
 
             // converting to blob, if not error (invalid argument in 'put' at index 0: expected blob or file)
             var reader = new FileReader();
@@ -210,10 +212,18 @@
 
                 // TODO: form validaton  
                 // https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Form_validation
-
+                console.log(displayTitleRef.value);
+                var metadata = {
+                    customMetadata: {
+                        'titleDisplay' : displayTitleRef.value ,
+                        'year': yearRef.value,
+                        'semester': semesterRef.value
+                    }
+                };
+                
                 // Uploading a file, it will return "upload task"
                 // we then assign this upload task to monitor the upload progress
-                var task = storageRef.put(blob);
+                var task = storageRef.put(blob, metadata);
 
                 // Register three observers:
                 // 1. 'state_changed' observer, called any time the state changes

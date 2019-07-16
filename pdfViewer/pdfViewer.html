@@ -398,6 +398,7 @@
 
     //parsing and displaying data from index.html
     window.onload = function () {
+      // manipulate string and decode the URI component back to original link
       let url = document.location.href;
       let params = url.split('?')[1].split('&');
       let viewURL = decodeURIComponent(params[0]);
