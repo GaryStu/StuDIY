@@ -215,9 +215,10 @@
                 console.log(displayTitleRef.value);
                 var metadata = {
                     customMetadata: {
-                        'titleDisplay' : displayTitleRef.value ,
+                        'titleDisplay' : displayTitleRef.value,
                         'year': yearRef.value,
-                        'semester': semesterRef.value
+                        'semester': semesterRef.value,
+                        'finalDisplay': yearRef.value + " " + semesterRef.value + " " + displayTitleRef.value
                     }
                 };
                 

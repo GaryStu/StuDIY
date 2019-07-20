@@ -53,14 +53,24 @@ for (i = 0; i < coll.length; i++) {
             lectureNotesStatus = true;
             // Create a reference under which you want to list
             var listRef = firebase.storage().ref().child(moduleCode + '/' + 'lectureNotes');
-            
+
+            var lectureNotesArray = []; 
+
             // Find all the prefixes and items.
             listRef.listAll().then(
             function(res) {
             res.items.forEach(function(itemRef) {
                 // All the items under listRef.
                 console.log(itemRef.fullPath);
-                
+                //push the itemRef to the lectureNotesArray to be sorted later
+                lectureNotesArray.push(itemRef);
+
+                itemRef.getMetadata().then(function(metadata) {
+                    console.log(metadata.customMetadata.year);
+                }).catch(function(error) {
+                    console.log('error metadata or metadata does not exist');
+                });
+
                 itemRef.getDownloadURL().then(function(url) {
                     //using the GET method to concatenate the link url of the pdf that will be opened in pdfViewer
                     viewerUrl = 'pdfViewer/pdfViewer.html?name' + encodeURIComponent(url);
@@ -172,13 +182,9 @@ for (i = 0; i < coll.length; i++) {
             miscStatus = true;
             // Create a reference under which you want to list
             var listRef = firebase.storage().ref().child(moduleCode + '/' + 'miscellaneous');
-            var itemArray = []; 
-            itemArray.sort(function (a, b) {
-                a.year - b.year;
-            });
-            itemArray.sort(function (a, b) {
-                
-            })
+            
+            
+
             // Find all the prefixes and items.
             listRef.listAll().then(
             function(res) {
@@ -196,7 +202,6 @@ for (i = 0; i < coll.length; i++) {
                     miscElement.appendChild(a);
                     miscElement.appendChild(br);
                 });
-
             });
             }).catch(function(error) {
                 console.log('error(Miscellaneous)');

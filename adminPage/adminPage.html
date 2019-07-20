@@ -1,0 +1,162 @@
+<html>
+
+<head>
+    <title> Admin Page</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Fira+Sans);
+
+        body {
+            background-color: #222121;
+        }
+
+        .test {
+            color: white;
+        }
+
+        .container {
+            display: flex;
+            width: 11%;
+            margin-left: 1270px;
+            overflow: hidden;
+            margin-top: -46px;
+        }
+
+        .button-container {
+            padding: 0px 5px;
+            font-family: 'Fira Sans', sans-serif;
+
+        }
+
+        .button-container:not(:last-child) {
+            margin-right: 7px;
+            height: 25px;
+            border-right: 0.5px solid white;
+        }
+
+        header {
+            font-family: 'Fira Sans', sans-serif;
+            font-size: 24px;
+            color: white;
+            margin-left: 630px;
+            margin-top: 40px;
+            display: inline-block;
+        }
+
+        .spacing {
+            height: 30px;
+            font-family: 'Fira Sans', sans-serif;
+            font-size: 23px;
+            color: white;
+            text-align: center;
+            margin-top: 25px;
+            display: inline-block;
+        }
+
+        #reqheader {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <a href=home.html> <img type="logo"
+            src=data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBB%0D%0AZG9iZSBJbGx1c3RyYXRvciAxNS4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9u%0D%0AOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBT%0D%0AVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzEx%0D%0ALmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3%0D%0ALnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxp%0D%0AbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB3aWR0aD0iMTAyLjI1cHgiIGhlaWdodD0iMjIuNXB4IiB2%0D%0AaWV3Qm94PSIyMi4zNjUgNTQuODY1IDEwMi4yNSAyMi41IiBlbmFibGUtYmFja2dyb3VuZD0ibmV3%0D%0AIDIyLjM2NSA1NC44NjUgMTAyLjI1IDIyLjUiDQoJIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHBh%0D%0AdGggZmlsbD0iI0VDRTcwRCIgZD0iTTI0LjQ2Niw3Mi4yNTRsMi41OTQtMy4wOTdjMS42OCwxLjMy%0D%0ALDMuNTA0LDIuMDE3LDUuNDQ3LDIuMDE3YzEuMjcyLDAsMS45NDQtMC40MzMsMS45NDQtMS4xNXYt%0D%0AMC4wNDgNCgljMC0wLjcyMi0wLjU1Mi0xLjA4LTIuODU0LTEuNjM0Yy0zLjU3Ni0wLjgxNC02LjMz%0D%0AOC0xLjgyMi02LjMzOC01LjI1N3YtMC4wNDhjMC0zLjEyLDIuNDc0LTUuMzc3LDYuNTA2LTUuMzc3%0D%0ADQoJYzIuODU0LDAsNS4wODgsMC43NzEsNi45MTEsMi4yMzJsLTIuMzI2LDMuMjg4Yy0xLjUzNi0x%0D%0ALjEwNC0zLjIxOC0xLjY1Ni00LjcwNS0xLjY1NmMtMS4xMjgsMC0xLjY4MiwwLjQ1Ni0xLjY4Miwx%0D%0ALjA4djAuMDQ5DQoJYzAsMC43NjgsMC41NzYsMS4xMDQsMi45MywxLjYzMmMzLjg0LDAuODQsNi4y%0D%0AMzksMi4wODgsNi4yMzksNS4yMzJ2MC4wNDhjMCwzLjQzMy0yLjcxMiw1LjQ3My02Ljc5Miw1LjQ3%0D%0AMw0KCUMyOS4zNjIsNzUuMDM4LDI2LjU1NCw3NC4xMDEsMjQuNDY2LDcyLjI1NHoiLz4NCjxwYXRo%0D%0AIGZpbGw9IiNFQ0U3MEQiIGQ9Ik00NS4wMSw2Mi4wMjloLTUuMDE2di00LjA4MWgxNC43MTN2NC4w%0D%0AODFoLTUuMDQxVjc0Ljc1SDQ1LjAxVjYyLjAyOXoiLz4NCjxwYXRoIGZpbGw9IiNFQ0U3MEQiIGQ9%0D%0AIk01Ni41NTMsNjcuMzgydi05LjQzNGg0LjcwM3Y5LjMzN2MwLDIuNDI1LDEuMjI2LDMuNTc2LDMu%0D%0AMDk4LDMuNTc2YzEuODk2LDAsMy4xMjEtMS4xMDQsMy4xMjEtMy40NTZ2LTkuNDU3DQoJaDQuNzA1%0D%0AdjkuMzEyYzAsNS40LTMuMDk5LDcuODAzLTcuODczLDcuODAzQzU5LjU1NCw3NS4wNjIsNTYuNTUz%0D%0ALDcyLjYzNyw1Ni41NTMsNjcuMzgyeiIvPg0KPHBhdGggZmlsbD0iI0VDRTcwRCIgZD0iTTc0Ljkz%0D%0ANyw1Ny45NDhoNi41MDVjNS45NzcsMCw5LjQ1NywzLjQ1Nyw5LjQ1Nyw4LjMwNXYwLjA0OGMwLDQu%0D%0AODUxLTMuNTI4LDguNDQ5LTkuNTU0LDguNDQ5aC02LjQwOFY1Ny45NDgNCgl6IE03OS41OTQsNjIu%0D%0AMDUydjguNTY5aDEuODk2YzIuODA5LDAsNC42NTYtMS41MzYsNC42NTYtNC4yNDl2LTAuMDQ4YzAt%0D%0AMi42ODgtMS44NS00LjI3Mi00LjY1Ni00LjI3Mkg3OS41OTR6Ii8+DQo8cGF0aCBmaWxsPSIjRUNF%0D%0ANzBEIiBkPSJNOTMuNDQxLDU3Ljk0OGg0LjY1NlY3NC43NWgtNC42NTZWNTcuOTQ4eiIvPg0KPHBh%0D%0AdGggZmlsbD0iI0VDRTcwRCIgZD0iTTEwNi4wNDIsNjguNDYybC02LjQwOC0xMC41MTRoNS4zMDds%0D%0AMy40NTYsNi4xMjFsMy40NzktNi4xMjFoNS4yMDhsLTYuMzg1LDEwLjQ0MXY2LjM1OGgtNC42NTZW%0D%0ANjguNDYyDQoJTDEwNi4wNDIsNjguNDYyeiIvPg0KPGNpcmNsZSBmaWxsPSIjRUNFNzBEIiBjeD0i%0D%0AMTE4LjAyNSIgY3k9IjcxLjgwNiIgcj0iMi45NDIiLz4NCjwvc3ZnPg0K
+            alt="art" style="margin-top: 12px; margin-left: 608px;" height=55px></a>
+    <div class="container">
+        <div class="button-container"><a
+                style="display: inline-block; margin-right: 5px; color: white; margin-top: -1px;" href=home.html> <img
+                    src="http://codeitdown.com/media/Home_Icon.svg" style="height: 25px; width: auto;"
+                    type="logo" /></a></div>
+        <div class="button-container"><a style="display: inline-block; color: white; font-size: 18px;"> Sign Out </a>
+        </div>
+    </div>
+    <div>
+        <header> Upload requests </header>
+        <!--  <div class="spacing">
+            <div style="display: inline-block; margin-left: 370px;"> Filter: </div>
+            <input type="text"
+                style="display: inline-block; margin-left: 7px; margin-top: -30px; width: 170px; height: 30px;"
+                name="search" id="search" placeholder="Enter Module Code" class="form-control" autocomplete="off"
+                required />
+            <ul class="list-group" id="result" style="width: 300px; margin: 0 0 -220 150; font-size: 10px;"></ul>
+        </div> -->
+    </div>
+    <hr>
+    <br>
+    <div class="files">
+    </div>
+
+    <!--     <div class="test">
+        <input type="checkbox" id="parent" /> Check/Uncheck All
+        <input type="checkbox" class="child" /> Checkbox 1
+        <input type="checkbox" class="child" /> Checkbox 2
+        <input type="checkbox" class="child" /> Checkbox 3
+    </div> -->
+</body>
+
+</html>
+
+<script>
+    // Initialize Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyBoWu-FQKyuskKlXF77SknhQazBi6tQpEI",
+        authDomain: "studiy.firebaseapp.com",
+        databaseURL: "https://studiy.firebaseio.com",
+        projectId: "studiy",
+        storageBucket: "studiy.appspot.com",
+        messagingSenderId: "973457443239",
+        appId: "1:973457443239:web:e6be93a824079bb0"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    // Get a reference to the storage service, which is used to create references in your storage bucket
+    var storage = firebase.storage();
+
+    let fileList = document.getElementsByClassName('files');
+
+    var listRef = firebase.storage().ref().child(moduleCode + '/' + 'lectureNotes');
+
+    // Find all the prefixes and items.
+    listRef.listAll().then(
+        function (res) {
+            res.items.forEach(function (itemRef) {
+                // All the items under listRef.
+                console.log(itemRef.fullPath);
+
+                itemRef.getDownloadURL().then(function (url) {
+                    //using the GET method to concatenate the link url of the pdf that will be opened in pdfViewer
+                    viewerUrl = 'pdfViewer/pdfViewer.html?name' + encodeURIComponent(url);
+                    // Populating the categories with links
+                    let br = document.createElement('br');
+                    let a = document.createElement('a');
+                    let linkText = document.createTextNode(itemRef.fullPath);
+                    a.appendChild(linkText);
+                    a.href = viewerUrl;
+                    fileList.appendChild(a);
+                    fileList.appendChild(br);
+                });
+            });
+        });
+
+</script>
+<!-- $(document).ready(function () {
+$("#parent").click(function () {
+$(".child").prop("checked", this.checked);
+});
+
+$('.child').click(function () {
+if ($('.child:checked').length == $('.child').length) {
+$('#parent').prop('checked', true);
+} else {
+$('#parent').prop('checked', false);
+}
+});
+});  -->
