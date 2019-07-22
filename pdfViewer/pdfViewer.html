@@ -334,28 +334,28 @@
         <div class="navback">
             <div class="navigation">
                 <button class="dropBtn"
-                    style="display: inline-block; margin-right: 25px; margin-top: 6px; color: white;"
+                    style="display: inline-block; margin-right: 25px; margin-top: 6px; color: white;" onclick="openTab(event, 'LectureNotes')"
                     > Lecture Notes </button>
-                <div id="LectureNotes" class="dropdown-content">
+                <div id="LectureNotes" class="dropdown-content" >
                 </div>
-                <button class="dropBtn" style="display: inline-block; margin-right: 40px; color: white;"
+                <button class="dropBtn" style="display: inline-block; margin-right: 40px; color: white; " onclick="openTab(event, 'Tutorials')"
                     >
                     Tutorials
                 </button>
                 <div id="Tutorials" class="dropdown-content">
                 </div>
-                <button style="display: inline; margin-right: 40px; color: white;" 
+                <button style="display: inline; margin-right: 40px; color: white;" onclick="openTab(event, 'PYP')" 
                     class="dropBtn"> Past Year
                     Papers </button>
-                <div id="PYP" class="dropdown-content">
+                <div id="PYP" class="dropdown-content" >
                 </div>
-                <button style="display: inline; margin-right: 40px; color: white;" 
+                <button style="display: inline; margin-right: 40px; color: white;" onclick="openTab(event, 'ExtraPractice')"  
                     class="dropBtn"> Extra
                     Practice
                 </button>
                 <div id="ExtraPractice" class="dropdown-content">
                 </div>
-                <button style="display: inline; margin-right: 40px; color: white;" 
+                <button style="display: inline; margin-right: 40px; color: white;" onclick="openTab(event, 'Misc')"
                     class="dropBtn">
                     Miscellaneous
                 </button>
@@ -388,7 +388,6 @@
                 <label for="name">Name</label>
                 <input type="text" id="name" style="color: black; margin-bottom: 30px;" autocomplete="off">
                 <br>
-
                 <input type="submit" value="Post Comment" style="margin-left: 520px;">
             </form>
         </div>
@@ -451,7 +450,8 @@
     let extraPracticeStatus = false;
     let miscStatus = false;
     let moduleCode;
-    //parsing and displaying data from index.html
+    
+    //decoding the URI components and loading the relevant files in the same mods in the tabs
     window.onload = function () {
         let url = document.location.href;
         let params = url.split('?')[1].split('&');
@@ -466,16 +466,8 @@
         let newViewer = oldViewer.cloneNode(true);
         newViewer.setAttribute('src', viewURL);
         oldViewer.parentNode.replaceChild(newViewer, oldViewer);
-    }
 
-
-    let dropBtn = document.getElementsByClassName("dropBtn");
-    for (let j = 0; j < dropBtn.length; j++)
-    {
-        dropBtn[j].addEventListener("click", function() {
-            //this.classList.toggle("active");
-            var content = this.nextElementSibling;
-            if (!lectureNotesStatus) {
+        if (!lectureNotesStatus) {
                 lectureNotesStatus = true;
                 // Create a reference under which you want to list
                 var listRef = firebase.storage().ref().child(moduleCode + '/' + 'lectureNotes');
@@ -505,152 +497,185 @@
                 }).catch(function(error) {
                     console.log('error(Lecture Notes)');
                 });
-                document.getElementById("LectureNotes").classList.toggle("show");
+                // document.getElementById("LectureNotes").classList.toggle("show");
             }
 
-            if (!tutorialStatus) {
-                tutorialStatus = true;
-                // Create a reference under which you want to list
-                var listRef = firebase.storage().ref().child(moduleCode + '/' + 'tutorials');
-                
-                // Find all the prefixes and items.
-                listRef.listAll().then(
-                function(res) {
-                res.items.forEach(function(itemRef) {
-                    // All the items under listRef.
+        if (!tutorialStatus) {
+            tutorialStatus = true;
+            // Create a reference under which you want to list
+            var listRef = firebase.storage().ref().child(moduleCode + '/' + 'tutorials');
+            
+            // Find all the prefixes and items.
+            listRef.listAll().then(
+            function(res) {
+            res.items.forEach(function(itemRef) {
+                // All the items under listRef.
+                // Populating the categories with links
+
+                itemRef.getDownloadURL().then(function(url) {
+                    //using the GET method to concatenate the link url of the pdf that will be opened in pdfViewer
+                    viewerUrl = 'pdfViewer.html?name' + encodeURIComponent(url);
                     // Populating the categories with links
+                    let br = document.createElement('br');
+                    let a = document.createElement('a');
+                    let linkText = document.createTextNode(itemRef.fullPath);
+                    a.appendChild(linkText);
+                    a.href = viewerUrl;
+                    let tutorialsElement = document.getElementById('Tutorials');
+                    tutorialsElement.appendChild(a);
+                    tutorialsElement.appendChild(br);
+                });
+            });
+            }).catch(function(error) {
+                console.log('error(Tutorials)');
+            });
+            // document.getElementById("Tutorials").classList.toggle("show");
+        }
 
-                    itemRef.getDownloadURL().then(function(url) {
-                        //using the GET method to concatenate the link url of the pdf that will be opened in pdfViewer
-                        viewerUrl = 'pdfViewer.html?name' + encodeURIComponent(url);
-                        // Populating the categories with links
-                        let br = document.createElement('br');
-                        let a = document.createElement('a');
-                        let linkText = document.createTextNode(itemRef.fullPath);
-                        a.appendChild(linkText);
-                        a.href = viewerUrl;
-                        let tutorialsElement = document.getElementById('Tutorials');
-                        tutorialsElement.appendChild(a);
-                        tutorialsElement.appendChild(br);
-                    });
-                });
-                }).catch(function(error) {
-                    console.log('error(Tutorials)');
-                });
-                document.getElementById("Tutorials").classList.toggle("show");
-            }
-
-            if (!pypStatus) {
-                pypStatus = true;
-                // Create a reference under which you want to list
-                var listRef = firebase.storage().ref().child(moduleCode + '/' + 'pastYearPapers');
-                
-                // Find all the prefixes and items.
-                listRef.listAll().then(
-                function(res) {
-                res.items.forEach(function(itemRef) {
-                    // All the items under listRef.
-                    console.log(itemRef.fullPath);
-                    itemRef.getDownloadURL().then(function(url) {
-                        //using the GET method to concatenate the link url of the pdf that will be opened in pdfViewer
-                        viewerUrl = 'pdfViewer.html?name' + encodeURIComponent(url);
-                        // Populating the categories with links
-                        let br = document.createElement('br');
-                        let a = document.createElement('a');
-                        let linkText = document.createTextNode(itemRef.fullPath);
-                        a.appendChild(linkText);
-                        a.href = viewerUrl;
-                        let pypElement = document.getElementById("PYP");
-                        pypElement.appendChild(a);
-                        pypElement.appendChild(br);
-                    });
-                });
-                }).catch(function(error) {
-                    console.log('error(PYPs)');
-                });
-                document.getElementById("PYP").classList.toggle("show");
-            }
-
-            if (!pypStatus) {
-                extraPracticeStatus = true;
-                // Create a reference under which you want to list
-                var listRef = firebase.storage().ref().child(moduleCode + '/' + 'extraPractice');
-                
-                // Find all the prefixes and items.
-                listRef.listAll().then(
-                function(res) {
-                res.items.forEach(function(itemRef) {
-                    // All the items under listRef.
-                    itemRef.getDownloadURL().then(function(url) {
-                        //using the GET method to concatenate the link url of the pdf that will be opened in pdfViewer
-                        viewerUrl = 'pdfViewer.html?name' + encodeURIComponent(url);
-                        // Populating the categories with links
-                        let br = document.createElement('br');
-                        let a = document.createElement('a');
-                        let linkText = document.createTextNode(itemRef.fullPath);
-                        a.appendChild(linkText);
-                        a.href = viewerUrl;
-                        extraPracticeElement = document.getElementById('ExtraPractice');
-                        extraPracticeElement.appendChild(a);
-                        extraPracticeElement.appendChild(br);
-                    });
-                });
-                }).catch(function(error) {
-                    console.log('error(Extra Practices)');
-                }); 
-                document.getElementById("ExtraPractice").classList.toggle("show");
-            }
-
-            if (!miscStatus) {
-                miscStatus = true;
-                // Create a reference under which you want to list
-                var listRef = firebase.storage().ref().child(moduleCode + '/' + 'miscellaneous');
-                /*
-                var itemArray = []; 
-                itemArray.sort(function (a, b) {
-                    a.year - b.year;
-                });
-                itemArray.sort(function (a, b) {
-
-                }); */
-                // Find all the prefixes and items.
-                listRef.listAll().then(
-                function(res) {
-                res.items.forEach(function(itemRef) {
+        if (!pypStatus) {
+            pypStatus = true;
+            // Create a reference under which you want to list
+            var listRef = firebase.storage().ref().child(moduleCode + '/' + 'pastYearPapers');
+            
+            // Find all the prefixes and items.
+            listRef.listAll().then(
+            function(res) {
+            res.items.forEach(function(itemRef) {
+                // All the items under listRef.
+                console.log(itemRef.fullPath);
+                itemRef.getDownloadURL().then(function(url) {
+                    //using the GET method to concatenate the link url of the pdf that will be opened in pdfViewer
+                    viewerUrl = 'pdfViewer.html?name' + encodeURIComponent(url);
                     // Populating the categories with links
-                    itemRef.getDownloadURL().then(function(url) {
-                        //using the GET method to concatenate the link url of the pdf that will be opened in pdfViewer
-                        viewerUrl = 'pdfViewer.html?name' + encodeURIComponent(url);
-                        // Populating the categories with links
-                        let br = document.createElement('br');
-                        let a = document.createElement('a');
-                        let linkText = document.createTextNode(itemRef.fullPath);
-                        a.appendChild(linkText);
-                        a.href = viewerUrl;
-                        let miscElement = document.getElementById("Misc");
-                        miscElement.appendChild(a);
-                        miscElement.appendChild(br);
-                    });
+                    let br = document.createElement('br');
+                    let a = document.createElement('a');
+                    let linkText = document.createTextNode(itemRef.fullPath);
+                    a.appendChild(linkText);
+                    a.href = viewerUrl;
+                    let pypElement = document.getElementById("PYP");
+                    pypElement.appendChild(a);
+                    pypElement.appendChild(br);
                 });
-                }).catch(function(error) {
-                    console.log('error(Miscellaneous)');
-                }); 
-                document.getElementById("Misc").classList.toggle("show");
-            }
-        })
+            });
+            }).catch(function(error) {
+                console.log('error(PYPs)');
+            });
+            // document.getElementById("PYP").classList.toggle("show");
+        }
+
+        if (!extraPracticeStatus) {
+            extraPracticeStatus = true;
+            // Create a reference under which you want to list
+            var listRef = firebase.storage().ref().child(moduleCode + '/' + 'extraPractice');
+            
+            // Find all the prefixes and items.
+            listRef.listAll().then(
+            function(res) {
+            res.items.forEach(function(itemRef) {
+                // All the items under listRef.
+                itemRef.getDownloadURL().then(function(url) {
+                    //using the GET method to concatenate the link url of the pdf that will be opened in pdfViewer
+                    viewerUrl = 'pdfViewer.html?name' + encodeURIComponent(url);
+                    // Populating the categories with links
+                    let br = document.createElement('br');
+                    let a = document.createElement('a');
+                    let linkText = document.createTextNode(itemRef.fullPath);
+                    a.appendChild(linkText);
+                    a.href = viewerUrl;
+                    extraPracticeElement = document.getElementById('ExtraPractice');
+                    extraPracticeElement.appendChild(a);
+                    extraPracticeElement.appendChild(br);
+                });
+            });
+            }).catch(function(error) {
+                console.log('error(Extra Practices)');
+            }); 
+            // document.getElementById("ExtraPractice").classList.toggle("show");
+        }
+
+        if (!miscStatus) {
+            miscStatus = true;
+            // Create a reference under which you want to list
+            var listRef = firebase.storage().ref().child(moduleCode + '/' + 'miscellaneous');
+            /*
+            var itemArray = []; 
+            itemArray.sort(function (a, b) {
+                a.year - b.year;
+            });
+            itemArray.sort(function (a, b) {
+
+            }); */
+            // Find all the prefixes and items.
+            listRef.listAll().then(
+            function(res) {
+            res.items.forEach(function(itemRef) {
+                // Populating the categories with links
+                itemRef.getDownloadURL().then(function(url) {
+                    //using the GET method to concatenate the link url of the pdf that will be opened in pdfViewer
+                    viewerUrl = 'pdfViewer.html?name' + encodeURIComponent(url);
+                    // Populating the categories with links
+                    let br = document.createElement('br');
+                    let a = document.createElement('a');
+                    let linkText = document.createTextNode(itemRef.fullPath);
+                    a.appendChild(linkText);
+                    a.href = viewerUrl;
+                    let miscElement = document.getElementById("Misc");
+                    miscElement.appendChild(a);
+                    miscElement.appendChild(br);
+                });
+            });
+            }).catch(function(error) {
+                console.log('error(Miscellaneous)');
+            }); 
+            //document.getElementById("Misc").classList.toggle("show");
+        }
     }
+
+    let currentTab;
+
+    function openTab(evt, tabId) {
+        // Declare all variables 
+        var i, dropdownContent, dropdownLinks;
+
+        //Get all elements with class="dropdown-content" and hide them
+        dropdownContent = document.getElementsByClassName("dropdown-content");
+        for (i = 0; i < dropdownContent.length ; i++) {
+            dropdownContent[i].style.display = "none";
+        }
+
+        // Get all elements with class "dropdownLinks"
+        dropdownLinks = document.getElementsByClassName("dropBtn");
+        for (i = 0; i < dropdownLinks.length; i++) {
+            dropdownLinks[i].className = dropdownLinks[i].className.replace(" active", "");
+        }
+
+        //Show the current tab, and add an "active" class to the button that opened the tab
+        if (!(evt.currentTarget === currentTab)) {
+            document.getElementById(tabId).style.display = "block";
+            evt.currentTarget.className += " active";
+            currentTab = evt.currentTarget;
+        } else {
+            document.getElementById(tabId).style.display = "none"; 
+            evt.currentTarget.className.replace(" active", "");
+            currentTab = null;
+        }
+    }
+    
+    
         
 
     //this is for when any part of the document is clicked if any tab is still open it will close 
     $(document).on('click', function (event) {
+        //if we press clock anywhere but the tabs
         if (!event.target.closest('.dropbtn')) {
             var dropdowns = document.getElementsByClassName("dropdown-content");
             var i;
             for (i = 0; i < dropdowns.length; i++) {
                 var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
+                if (openDropdown.style.display === "block") {
+                    openDropdown.style.display = "none";
                 }
+
             }
         }
     });
