@@ -102,6 +102,21 @@
             height: 20px;
             border-right: 0.5px solid white;
         }
+
+        #uploadProgress {
+            margin-top: 30px;
+            width: 100%;
+            background-color: grey;
+        }
+
+        #uploadBar {
+            width: 10%;
+            height: 30px;
+            background-color: #4CAF50;
+            text-align: center; /* to center it horizontally */
+            line-height: 30px; /* To center it vertically */
+            color: white;
+        }
     </style>
 </head>
 
@@ -166,6 +181,9 @@
         </div>
         <div class="spacing">
             <input type="submit" value="Upload" id="submitButton">
+        </div>
+        <div id = "uploadProgress">
+            <div id="uploadBar" style="margin-top:50px;">0%</div>
         </div>
     </form>
     <p id="caption"> Please note that uploaded documents are subject to the admins' approval before they will be
@@ -237,7 +255,11 @@
                         // Observe state change events such as progress, pause, and resume
                         // Get task progress including the number of bytes uploaded and the total number of bytes to be uploaded 
                         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        var trunc = Math.trunc(progress);
                         console.log('Upload is ' + progress + '% done');
+                        var uploadBar = document.getElementById('uploadBar');
+                        uploadBar.style.width = progress + '%';
+                        uploadBar.innerHTML = trunc + '%';
                         switch (snapshot.state) {
                             case firebase.storage.TaskState.PAUSED: // or 'paused'
                                 console.log('Upload is paused');

@@ -334,28 +334,28 @@
         <div class="navback">
             <div class="navigation">
                 <button class="dropBtn"
-                    style="display: inline-block; margin-right: 25px; margin-top: 6px; color: white;" onclick="openTab(event, 'LectureNotes')"
+                    style="display: inline-block; margin-right: 25px; margin-top: 6px; color: white;" onclick="toggleTab(event, 'LectureNotes')"
                     > Lecture Notes </button>
                 <div id="LectureNotes" class="dropdown-content" >
                 </div>
-                <button class="dropBtn" style="display: inline-block; margin-right: 40px; color: white; " onclick="openTab(event, 'Tutorials')"
+                <button class="dropBtn" style="display: inline-block; margin-right: 40px; color: white; " onclick="toggleTab(event, 'Tutorials')"
                     >
                     Tutorials
                 </button>
                 <div id="Tutorials" class="dropdown-content">
                 </div>
-                <button style="display: inline; margin-right: 40px; color: white;" onclick="openTab(event, 'PYP')" 
+                <button style="display: inline; margin-right: 40px; color: white;" onclick="toggleTab(event, 'PYP')" 
                     class="dropBtn"> Past Year
                     Papers </button>
                 <div id="PYP" class="dropdown-content" >
                 </div>
-                <button style="display: inline; margin-right: 40px; color: white;" onclick="openTab(event, 'ExtraPractice')"  
+                <button style="display: inline; margin-right: 40px; color: white;" onclick="toggleTab(event, 'ExtraPractice')"  
                     class="dropBtn"> Extra
                     Practice
                 </button>
                 <div id="ExtraPractice" class="dropdown-content">
                 </div>
-                <button style="display: inline; margin-right: 40px; color: white;" onclick="openTab(event, 'Misc')"
+                <button style="display: inline; margin-right: 40px; color: white;" onclick="toggleTab(event, 'Misc')"
                     class="dropBtn">
                     Miscellaneous
                 </button>
@@ -631,9 +631,10 @@
         }
     }
 
+    //employed a variable 'currentTab' that will act as a buffer for the previously clicked element
     let currentTab;
 
-    function openTab(evt, tabId) {
+    function toggleTab(evt, tabId) {
         // Declare all variables 
         var i, dropdownContent, dropdownLinks;
 
@@ -643,13 +644,14 @@
             dropdownContent[i].style.display = "none";
         }
 
-        // Get all elements with class "dropdownLinks"
+        // Get all elements with class "dropdownLinks" and hide them
         dropdownLinks = document.getElementsByClassName("dropBtn");
         for (i = 0; i < dropdownLinks.length; i++) {
             dropdownLinks[i].className = dropdownLinks[i].className.replace(" active", "");
         }
 
-        //Show the current tab, and add an "active" class to the button that opened the tab
+        // If the element click is not the currentTab, it will open that tab
+        // However, if the element clicked is the currentTab, it will close that tab and set currentTab to "null" 
         if (!(evt.currentTarget === currentTab)) {
             document.getElementById(tabId).style.display = "block";
             evt.currentTarget.className += " active";
@@ -677,6 +679,7 @@
                 }
 
             }
+            currentTab = null;
         }
     });
     

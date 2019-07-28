@@ -1,6 +1,7 @@
 <html>
 
 <head>
+    <meta charset="utf-8"/>
     <title> Admin Page</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
@@ -51,7 +52,7 @@
         .spacing {
             height: 30px;
             font-family: 'Fira Sans', sans-serif;
-            font-size: 23px;
+            font-size: 20px;
             color: white;
             text-align: center;
             margin-top: 25px;
@@ -62,6 +63,15 @@
             text-align: center;
             font-size: 24px;
             margin-top: 24px;
+        }
+
+        .uploadedfiles {
+            height: 20px;
+            font-family: 'Fira Sans', sans-serif;
+            font-size: 23px;
+            color: white;
+            text-align: center;
+            display: inline-block;
         }
     </style>
 </head>
@@ -80,18 +90,47 @@
     </div>
     <div>
         <header> Upload requests </header>
-        <!--  <div class="spacing">
-            <div style="display: inline-block; margin-left: 370px;"> Filter: </div>
-            <input type="text"
+        <div class="spacing">
+            <div style="display: inline-block; margin-left: 370px;"> Filter: <input type="text"
                 style="display: inline-block; margin-left: 7px; margin-top: -30px; width: 170px; height: 30px;"
-                name="search" id="search" placeholder="Enter Module Code" class="form-control" autocomplete="off"
-                required />
+                name="search" id="search" placeholder="Enter Module Code" class="form-control" autocomplete="off" 
+                required /> 
+            <button onclick="populate()" style="line-height:26px;"> Submit</button>
+            
+            
+        </div>
             <ul class="list-group" id="result" style="width: 300px; margin: 0 0 -220 150; font-size: 10px;"></ul>
-        </div> -->
+        </div> 
     </div>
     <hr>
     <br>
-    <div class="files">
+    <div class="uploadedfiles">
+        <!-- <div style="display: inline-block; margin-left: 640px;" > Lecture Notes </div>  -->
+        <div class="content" id="LectureNotes" style="text-align:left; margin-left: 40px;" >
+        </div>
+
+        <!-- <div style="display: inline-block; margin-left: 640px;" > Tutorials </div> -->
+        <div class="content" id="Tutorials" style="text-align:left; margin-left: 40px;">
+
+        </div>
+        
+        <!-- <div style="display: inline-block; margin-left: 640px;" > Past Year Papers </div> -->
+        <div class="content" id="PYP" style="text-align:left; margin-left: 40px;">
+
+        </div>
+
+        <!-- <div style="display: inline-block; margin-left: 640px;" > Extra Practice </div> -->
+        <div class="content" id="ExtraPractice" style="text-align:left; margin-left: 40px;">
+
+        </div>
+
+        <!-- <div style="display: inline-block; margin-left: 640px;" > Miscellaneous </div> -->
+        <div class="content" id="Misc" style="text-align:left; margin-left: 40px;">
+
+        </div>
+    </div>
+
+    <div class="fileEntries">
     </div>
 
     <!--     <div class="test">
@@ -103,9 +142,11 @@
 </body>
 
 </html>
-
+<script src="https://www.gstatic.com/firebasejs/6.2.3/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.2.3/firebase-storage.js"></script>
 <script>
     // Initialize Firebase
+
     const firebaseConfig = {
         apiKey: "AIzaSyBoWu-FQKyuskKlXF77SknhQazBi6tQpEI",
         authDomain: "studiy.firebaseapp.com",
@@ -118,33 +159,297 @@
     firebase.initializeApp(firebaseConfig);
 
     // Get a reference to the storage service, which is used to create references in your storage bucket
-    var storage = firebase.storage();
+    let storage = firebase.storage();
+    let search = document.getElementById('search'); 
+    let result = document.getElementById('result');
+    let lectureNotesElement = document.getElementById('LectureNotes');
+    let pypElement = document.getElementById('PYP');
+    let tutorialsElement = document.getElementById('Tutorials');
+    let extraPracticeElement = document.getElementById('ExtraPractice');
+    let miscElement = document.getElementById('Misc'); 
 
-    let fileList = document.getElementsByClassName('files');
+    function populate() {
+        let moduleSelected  = search.value;
+        let moduleCode = (moduleSelected.split(" "))[0];
+        console.log(moduleCode);
+        var lectureNotesArray = [];
+        
+        var listRef = firebase.storage().ref().child(moduleCode + '/' + 'lectureNotes');
 
-    var listRef = firebase.storage().ref().child(moduleCode + '/' + 'lectureNotes');
+        // Find all the prefixes and items.
+        listRef.listAll().then(
+            function(res) {
+                res.items.forEach(function(itemRef) {
+                    //push the itemRef to the LectureNotesArray to bes roted later
+                    lectureNotesArray.push(itemRef);
 
-    // Find all the prefixes and items.
-    listRef.listAll().then(
-        function (res) {
-            res.items.forEach(function (itemRef) {
-                // All the items under listRef.
-                console.log(itemRef.fullPath);
+                    itemRef.getDownloadURL().then(function(url) {
+                        //using the GET method to concatenate the link url of the pdf that will be opened in pdfViewer
+                        viewerUrl = '../pdfViewer/pdfViewer.html?name' + encodeURIComponent(url);
+                        let div = document.createElement('div');
+                        let br = document.createElement('br');
+                        let a = document.createElement('a');
+                        let linkText = document.createTextNode(itemRef.fullPath);
+                        a.appendChild(linkText);
+                        a.href = viewerUrl;
+                        let btn = document.createElement('BUTTON');
+                        btn.innerHTML = "ACCEPT";
+                        btn.setAttribute("style", "margin-left:30px;"); 
+                        btn.href = "";
 
-                itemRef.getDownloadURL().then(function (url) {
-                    //using the GET method to concatenate the link url of the pdf that will be opened in pdfViewer
-                    viewerUrl = 'pdfViewer/pdfViewer.html?name' + encodeURIComponent(url);
-                    // Populating the categories with links
-                    let br = document.createElement('br');
-                    let a = document.createElement('a');
-                    let linkText = document.createTextNode(itemRef.fullPath);
-                    a.appendChild(linkText);
-                    a.href = viewerUrl;
-                    fileList.appendChild(a);
-                    fileList.appendChild(br);
+                        let reject = document.createElement('BUTTON');
+                        reject.innerHTML = "REJECT";
+                        reject.setAttribute("style", "margin-left:30px;");
+                        reject.href = "";
+                        
+                        div.appendChild(a);                        
+                        div.appendChild(btn);
+                        div.appendChild(reject);
+                        /*
+                        var childElements = document.getElementById("LectureNotes").childNodes;
+                        var grandchildElements = childElements[0].childNodes;
+
+                        grandchildElements[0].href="";
+                        grandchildElements[1].href="";
+                        */
+                        div.appendChild(br);
+                        lectureNotesElement.appendChild(div);
+
+                        
+                    });
                 });
-            });
+            }
+        ).then(function () {
+            for (let i = 0; i < lectureNotesElement.childNodes.length; i++) {
+
+                // if press accept
+                /*
+                ((lectureNotesElement.childNodes)[i].childNodes)[1].addEventListener("click", function () {
+                    
+                });
+                */
+                // if press reject
+                // let testtest = (lectureNotesElement.childNodes)[i];
+                let testest = (lectureNotesElement.childNodes)[0];
+                console.log((testest.childNodes)[0]);
+                ((lectureNotesElement.childNodes)[i].childNodes)[2].addEventListener("click", function () {
+                    let fullRef = (((lectureNotesElement.childNodes)[i].childNodes)[0]).textContent;
+                    console.log(fullRef);
+                    // Create a reference to the file to delete
+                    let deleteRef = firebase.storage().ref().child(fullRef); 
+
+                    // Delete the file
+                    deleteRef.delete().then(function() {
+                        var parentElement = (lectureNotesElement.childNodes)[i];
+                        parentElement.innerHTML = '';
+                    }).catch(function(error) {
+                        console.log('error deleting files');
+                    });
+                    
+                });
+                /*
+                for (let j = 0; j < (lectureNotesElement.childNodes)[i].childNodes.length ; j++) {
+
+                }
+                */
+                
+            }
+            
+        }).catch(function(error) {
+            console.log('error (LectureNotes)');
         });
+        var listRef = firebase.storage().ref().child(moduleCode + '/' + 'tutorials');
+
+        // Find all the prefixes and items.
+        listRef.listAll().then(
+            function(res) {
+                res.items.forEach(function(itemRef) {
+                    //push the itemRef to the LectureNotesArray to bes roted later
+                    lectureNotesArray.push(itemRef);
+
+                    itemRef.getDownloadURL().then(function(url) {
+                        //using the GET method to concatenate the link url of the pdf that will be opened in pdfViewer
+                        viewerUrl = '../pdfViewer/pdfViewer.html?name' + encodeURIComponent(url);
+                        let div = document.createElement('div');
+                        let br = document.createElement('br');
+                        let a = document.createElement('a');
+                        let linkText = document.createTextNode(itemRef.fullPath);
+                        a.appendChild(linkText);
+                        a.href = viewerUrl;
+                        let btn = document.createElement('BUTTON');
+                        btn.innerHTML = "ACCEPT";
+                        btn.setAttribute("style", "margin-left:30px;"); 
+                        btn.href = "";
+
+                        let reject = document.createElement('BUTTON');
+                        reject.innerHTML = "REJECT";
+                        reject.setAttribute("style", "margin-left:30px;");
+                        reject.href = "";
+                        
+                        div.appendChild(a);                        
+                        div.appendChild(btn);
+                        div.appendChild(reject);
+                        /*
+                        var childElements = document.getElementById("LectureNotes").childNodes;
+                        var grandchildElements = childElements[0].childNodes;
+
+                        grandchildElements[0].href="";
+                        grandchildElements[1].href="";
+                        */
+                        div.appendChild(br);
+                        tutorialsElement.appendChild(div);
+                        
+                    });
+                });
+            }
+        ).catch(function(error) {
+            console.log('error (LectureNotes)');
+        });
+
+        var listRef = firebase.storage().ref().child(moduleCode + '/' + 'pastYearPapers');
+
+        // Find all the prefixes and items.
+        listRef.listAll().then(
+            function(res) {
+                res.items.forEach(function(itemRef) {
+                    //push the itemRef to the LectureNotesArray to bes roted later
+                    lectureNotesArray.push(itemRef);
+
+                    itemRef.getDownloadURL().then(function(url) {
+                        //using the GET method to concatenate the link url of the pdf that will be opened in pdfViewer
+                        viewerUrl = 'pdfViewer/pdfViewer.html?name' + encodeURIComponent(url);
+                        let div = document.createElement('div');
+                        let br = document.createElement('br');
+                        let a = document.createElement('a');
+                        let linkText = document.createTextNode(itemRef.fullPath);
+                        a.appendChild(linkText);
+                        a.href = viewerUrl;
+                        let btn = document.createElement('BUTTON');
+                        btn.innerHTML = "ACCEPT";
+                        btn.setAttribute("style", "margin-left:30px;"); 
+                        btn.href = "";
+
+                        let reject = document.createElement('BUTTON');
+                        reject.innerHTML = "REJECT";
+                        reject.setAttribute("style", "margin-left:30px;");
+                        reject.href = "";
+                        
+                        div.appendChild(a);                        
+                        div.appendChild(btn);
+                        div.appendChild(reject);
+                        /*
+                        var childElements = document.getElementById("LectureNotes").childNodes;
+                        var grandchildElements = childElements[0].childNodes;
+
+                        grandchildElements[0].href="";
+                        grandchildElements[1].href="";
+                        */
+                        div.appendChild(br);
+                        pypElement.appendChild(div);
+                        
+                    });
+                });
+            }
+        ).catch(function(error) {
+            console.log('error (LectureNotes)');
+        });
+
+        var listRef = firebase.storage().ref().child(moduleCode + '/' + 'extraPractice');
+
+        // Find all the prefixes and items.
+        listRef.listAll().then(
+            function(res) {
+                res.items.forEach(function(itemRef) {
+                    //push the itemRef to the LectureNotesArray to bes roted later
+                    lectureNotesArray.push(itemRef);
+
+                    itemRef.getDownloadURL().then(function(url) {
+                        //using the GET method to concatenate the link url of the pdf that will be opened in pdfViewer
+                        viewerUrl = '../pdfViewer/pdfViewer.html?name' + encodeURIComponent(url);
+                        let div = document.createElement('div');
+                        let br = document.createElement('br');
+                        let a = document.createElement('a');
+                        let linkText = document.createTextNode(itemRef.fullPath);
+                        a.appendChild(linkText);
+                        a.href = viewerUrl;
+                        let btn = document.createElement('BUTTON');
+                        btn.innerHTML = "ACCEPT";
+                        btn.setAttribute("style", "margin-left:30px;"); 
+                        btn.href = "";
+
+                        let reject = document.createElement('BUTTON');
+                        reject.innerHTML = "REJECT";
+                        reject.setAttribute("style", "margin-left:30px;");
+                        reject.href = "";
+                        
+                        div.appendChild(a);                        
+                        div.appendChild(btn);
+                        div.appendChild(reject);
+                        /*
+                        var childElements = document.getElementById("LectureNotes").childNodes;
+                        var grandchildElements = childElements[0].childNodes;
+
+                        grandchildElements[0].href="";
+                        grandchildElements[1].href="";
+                        */
+                        div.appendChild(br);
+                        extraPracticeElement.appendChild(div);
+                    });
+                });
+            }
+        ).catch(function(error) {
+            console.log('error (extraPractice)');
+        });
+    
+    
+        var listRef = firebase.storage().ref().child(moduleCode + '/' + 'miscellaneous');
+
+        // Find all the prefixes and items.
+        listRef.listAll().then(
+            function(res) {
+                res.items.forEach(function(itemRef) {
+                    //push the itemRef to the LectureNotesArray to bes roted later
+                    lectureNotesArray.push(itemRef);
+
+                    itemRef.getDownloadURL().then(function(url) {
+                        //using the GET method to concatenate the link url of the pdf that will be opened in pdfViewer
+                        viewerUrl = '../pdfViewer/pdfViewer.html?name' + encodeURIComponent(url);
+                        let div = document.createElement('div');
+                        let br = document.createElement('br');
+                        let a = document.createElement('a');
+                        let linkText = document.createTextNode(itemRef.fullPath);
+                        a.appendChild(linkText);
+                        a.href = viewerUrl;
+                        let btn = document.createElement('BUTTON');
+                        btn.innerHTML = "ACCEPT";
+                        btn.setAttribute("style", "margin-left:30px;"); 
+                        btn.href = "";
+
+                        let reject = document.createElement('BUTTON');
+                        reject.innerHTML = "REJECT";
+                        reject.setAttribute("style", "margin-left:30px;");
+                        reject.href = "";
+                        
+                        div.appendChild(a);                        
+                        div.appendChild(btn);
+                        div.appendChild(reject);
+                        /*
+                        var childElements = document.getElementById("LectureNotes").childNodes;
+                        var grandchildElements = childElements[0].childNodes;
+
+                        grandchildElements[0].href="";
+                        grandchildElements[1].href="";
+                        */
+                        div.appendChild(br);
+                        miscElement.appendChild(div);
+                    });
+                });
+            }
+        ).catch(function(error) {
+            console.log('error (misc)');
+        });
+    }
+        
 
 </script>
 <!-- $(document).ready(function () {
